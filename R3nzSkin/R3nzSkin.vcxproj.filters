@@ -17,9 +17,6 @@
     <Filter Include="Source Files\Skins">
       <UniqueIdentifier>{d978207e-684f-4e9b-a516-3a1bdf6da43a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utils">
-      <UniqueIdentifier>{908bf81e-18df-417d-bcd9-8e3458213e73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Offsets">
       <UniqueIdentifier>{6df88be6-4732-4c12-ab2a-b0e38f717525}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,9 @@
     </Filter>
     <Filter Include="Source Files\Config">
       <UniqueIdentifier>{a2d7fdd0-5331-4fcc-95c6-864f9d9d19bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{840d95cb-9ecd-469f-87e5-2072db8e5448}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +77,6 @@
     <ClCompile Include="Config.cpp">
       <Filter>Source Files\Config</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="SDK\CharacterDataStack.cpp">
       <Filter>Source Files\SDK</Filter>
     </ClCompile>
@@ -89,16 +86,13 @@
     <ClCompile Include="SDK\AIMinionClient.cpp">
       <Filter>Source Files\SDK</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SkinDatabase.hpp">
       <Filter>Source Files\Skins</Filter>
-    </ClInclude>
-    <ClInclude Include="fnv_hash.hpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="vmt_smart_hook.hpp">
-      <Filter>Source Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Offsets.hpp">
       <Filter>Source Files\Offsets</Filter>
@@ -145,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Source Files\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.hpp">
-      <Filter>Source Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SDK\GameState.hpp">
       <Filter>Source Files\SDK</Filter>
@@ -201,7 +192,22 @@
     <ClInclude Include="SDK\AITurret.hpp">
       <Filter>Source Files\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.hpp">
+    <ClInclude Include="Utils\lazy_importer.hpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\vmt_smart_hook.hpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\fnv_hash.hpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Logger.hpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.hpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\encryption.hpp">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,12 +6,12 @@
 #include <filesystem>
 #include <string>
 
-#include "fnv_hash.hpp"
+#include "utils/fnv_hash.hpp"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
-#include "vmt_smart_hook.hpp"
+#include "utils/vmt_smart_hook.hpp"
 
 #include "CheatManager.hpp"
 #include "Hooks.hpp"

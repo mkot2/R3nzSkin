@@ -3,8 +3,8 @@
 
 #include "AIBaseCommon.hpp"
 
-#include "../encryption.hpp"
-#include "../fnv_hash.hpp"
+#include "../utils/encryption.hpp"
+#include "../utils/fnv_hash.hpp"
 #include "../offsets.hpp"
 
 #include "../CheatManager.hpp"

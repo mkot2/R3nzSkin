@@ -7,8 +7,8 @@
 #include "GUI.hpp"
 #include "Memory.hpp"
 #include "SkinDatabase.hpp"
-#include "Utils.hpp"
-#include "fnv_hash.hpp"
+#include "utils/Utils.hpp"
+#include "utils/fnv_hash.hpp"
 #include "imgui/imgui.h"
 
 inline static void footer() noexcept

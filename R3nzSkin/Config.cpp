@@ -9,7 +9,7 @@
 
 #include "CheatManager.hpp"
 #include "Memory.hpp"
-#include "Utils.hpp"
+#include "utils/Utils.hpp"
 
 void Config::init() noexcept
 {

@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "fnv_hash.hpp"
+#include "utils/fnv_hash.hpp"
  
 class SkinDatabase {
 public:

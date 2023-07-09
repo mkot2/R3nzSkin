@@ -16,11 +16,13 @@
 
 #include "SDK/GameState.hpp"
 
+#include "Utils/lazy_importer.hpp"
+
 bool WINAPI HideThread(const HANDLE hThread) noexcept
 {
 	__try {
 		using FnSetInformationThread = NTSTATUS(NTAPI*)(HANDLE ThreadHandle, UINT ThreadInformationClass, PVOID ThreadInformation, ULONG ThreadInformationLength);
-		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(::GetProcAddress(::GetModuleHandle(L"ntdll.dll"), "NtSetInformationThread")) };
+		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(LI_FN(GetProcAddress)(LI_FN(GetModuleHandle)(L"ntdll.dll"), "NtSetInformationThread")) };
 
 		if (!NtSetInformationThread)
 			return false;
@@ -37,7 +39,7 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 	using namespace std::chrono_literals;
 
 	cheatManager.start();
-	if (HideThread(::GetCurrentThread()))
+	if (HideThread(LI_FN(GetCurrentThread)()))
 		cheatManager.logger->addLog("Thread Hided!\n");
 
 	cheatManager.memory->Search(true);
@@ -65,12 +67,12 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 	while (cheatManager.cheatState)
 		std::this_thread::sleep_for(250ms);
 
-	::ExitProcess(0u);
+	LI_FN(ExitProcess)(0u);
 }
 
 __declspec(safebuffers) BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD reason, [[maybe_unused]] LPVOID reserved)
 {
-	DisableThreadLibraryCalls(hModule);
+	LI_FN(DisableThreadLibraryCalls)(hModule);
 
 	if (reason != DLL_PROCESS_ATTACH)
 		return FALSE;
@@ -78,7 +80,7 @@ __declspec(safebuffers) BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD
 	HideThread(hModule);
 	std::setlocale(LC_ALL, ".utf8");
 
-	::_beginthreadex(nullptr, 0u, reinterpret_cast<_beginthreadex_proc_type>(DllAttach), nullptr, 0u, nullptr);
-	::CloseHandle(hModule);
+	LI_FN(_beginthreadex)(nullptr, 0u, reinterpret_cast<_beginthreadex_proc_type>(DllAttach), nullptr, 0u, nullptr);
+	LI_FN(CloseHandle)(hModule);
 	return TRUE;
 }

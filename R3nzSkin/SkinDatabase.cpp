@@ -7,7 +7,7 @@
 
 #include "CheatManager.hpp"
 #include "SkinDatabase.hpp"
-#include "fnv_hash.hpp"
+#include "utils/fnv_hash.hpp"
 
 void SkinDatabase::load() noexcept
 {

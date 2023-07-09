@@ -5,7 +5,7 @@
 #include "Config.hpp"
 #include "GUI.hpp"
 #include "Hooks.hpp"
-#include "Logger.hpp"
+#include "utils/Logger.hpp"
 #include "Memory.hpp"
 #include "SkinDatabase.hpp"
 
