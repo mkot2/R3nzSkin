@@ -24,8 +24,7 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 
 static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wParam, const LPARAM lParam) noexcept
 {
-	if (ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
-		return true;
+	static bool isInactive = false;
 
 	if (msg == WM_KEYDOWN) {
 		if (wParam == cheatManager.config->menuKey.getKey()) {
@@ -73,7 +72,18 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
 		}
 	}
 
-	return ::CallWindowProc(originalWndProc, window, msg, wParam, lParam);
+	if (cheatManager.gui->is_open && !isInactive) {
+		::CallWindowProc(originalWndProc, window, WM_ACTIVATE, WA_INACTIVE, 0);
+		isInactive = true;
+	} else if (!cheatManager.gui->is_open && isInactive) {
+		::CallWindowProc(originalWndProc, window, WM_ACTIVATE, WA_ACTIVE, 0);
+		isInactive = false;
+	}
+
+	if (cheatManager.gui->is_open && ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+		return true;
+	else
+		return ::CallWindowProc(originalWndProc, window, msg, wParam, lParam);
 }
 
 std::once_flag init_device;
