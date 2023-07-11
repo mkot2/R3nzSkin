@@ -286,7 +286,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="Memory.hpp" />
-    <ClInclude Include="Encryption.hpp" />
     <ClInclude Include="Hooks.hpp" />
     <ClInclude Include="GUI.hpp" />
     <ClInclude Include="Offsets.hpp" />
@@ -314,6 +313,7 @@
     <ClInclude Include="Utils\Logger.hpp" />
     <ClInclude Include="Utils\Utils.hpp" />
     <ClInclude Include="Utils\vmt_smart_hook.hpp" />
+    <ClInclude Include="Utils\xorstr.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="R3nzSkin.rc" />

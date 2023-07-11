@@ -2,6 +2,8 @@
 
 #include "imgui/imgui.h"
 
+#include "xorstr.hpp"
+
 class R3nzSkinLogger {
 public:
     R3nzSkinLogger() { this->clear(); }
@@ -28,27 +30,27 @@ public:
 
     void draw() noexcept
     {
-        if (ImGui::BeginPopup("Options")) {
-            ImGui::Checkbox("Auto-scroll", &this->autoScroll);
+        if (ImGui::BeginPopup(xorstr_("Options"))) {
+            ImGui::Checkbox(xorstr_("Auto-scroll"), &this->autoScroll);
             ImGui::EndPopup();
         }
 
-        if (ImGui::Button("Options"))
-            ImGui::OpenPopup("Options");
+        if (ImGui::Button(xorstr_("Options")))
+            ImGui::OpenPopup(xorstr_("Options"));
 
         ImGui::SameLine();
-        if (ImGui::Button("Clear"))
+        if (ImGui::Button(xorstr_("Clear")))
             this->clear();
 
         ImGui::SameLine();
-        if (ImGui::Button("Copy"))
+        if (ImGui::Button(xorstr_("Copy")))
             ImGui::LogToClipboard();
 
         ImGui::SameLine();
-        filter.Draw("Filter", -100.0f);
+        filter.Draw(xorstr_("Filter"), -100.0f);
 
         ImGui::Separator();
-        ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+        ImGui::BeginChild(xorstr_("scrolling"), ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         

@@ -9,6 +9,7 @@
 
 #include "../CheatManager.hpp"
 #include "Utils.hpp"
+#include "xorstr.hpp"
 
 struct Key {
     constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }
@@ -315,7 +316,7 @@ void ImGui::hotkey(const char* label, KeyBind& key, float samelineOffset, const 
 
     if (GetActiveID() == id) {
         PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
-        Button("...", size);
+        Button(xorstr_("..."), size);
         PopStyleColor();
 
         GetCurrentContext()->ActiveIdAllowOverlap = true;

@@ -12,6 +12,7 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 #include "utils/vmt_smart_hook.hpp"
+#include "Utils/xorstr.hpp"
 
 #include "CheatManager.hpp"
 #include "Hooks.hpp"
@@ -20,26 +21,6 @@
 #include "SDK/GameState.hpp"
 
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-static inline void testFunc() noexcept
-{
-	// The codes you write here are executed when you press the F7 key in the game.
-	
-	// Example Func
-	const auto minions{ cheatManager.memory->minionList };
-	for (auto i{ 0u }; i < minions->length; ++i) {
-		const auto minion{ minions->list[i] };
-		const auto owner{ minion->getGoldRedirectTarget() };
-		cheatManager.logger->addLog("Minion: %s\n\tModelName: %s\n\t", minion->get_name()->c_str(), minion->get_character_data_stack()->base_skin.model.str);
-		if (owner)
-			cheatManager.logger->addLog("OwnerName: %s\n\t\tModelName: %s\n\t", owner->get_name()->c_str(), owner->get_character_data_stack()->base_skin.model.str);
-		cheatManager.logger->addLog("IsLaneMinion: %d\n\t", minion->isLaneMinion());
-		cheatManager.logger->addLog("IsEliteMinion: %d\n\t", minion->isEliteMinion());
-		cheatManager.logger->addLog("IsEpicMinion: %d\n\t", minion->isEpicMinion());
-		cheatManager.logger->addLog("IsMinion: %d\n\t", minion->isMinion());
-		cheatManager.logger->addLog("IsJungle: %d\n\n", minion->isJungle());
-	}
-}
 
 static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wParam, const LPARAM lParam) noexcept
 {
@@ -89,8 +70,6 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
 					cheatManager.config->current_combo_skin_index = 1;
 				cheatManager.config->save();
 			}
-		} else if (wParam == VK_F7) {
-			testFunc();
 		}
 	}
 
@@ -135,7 +114,7 @@ namespace d3d_vtable {
 	static void init_imgui(void* device, bool is_d3d11 = false) noexcept
 	{
 		cheatManager.database->load();
-		cheatManager.logger->addLog("All skins loaded from memory!\n");
+		cheatManager.logger->addLog(xorstr_("All skins loaded from memory!\n"));
 		ImGui::CreateContext();
 		auto& style{ ImGui::GetStyle() };
 
@@ -223,12 +202,12 @@ namespace d3d_vtable {
 			::CoTaskMemFree(pathToFonts);
 			ImFontConfig cfg;
 			cfg.SizePixels = 15.0f;
-			io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), cfg.SizePixels, &cfg, tahomaRanges);
+			io.Fonts->AddFontFromFileTTF((path / xorstr_("tahoma.ttf")).string().c_str(), cfg.SizePixels, &cfg, tahomaRanges);
 			cfg.MergeMode = true;
-			io.Fonts->AddFontFromFileTTF((path / "malgun.ttf").string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesKorean());
-			io.Fonts->AddFontFromFileTTF((path / "msyh.ttc").string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesChineseFull());
+			io.Fonts->AddFontFromFileTTF((path / xorstr_("malgun.ttf")).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesKorean());
+			io.Fonts->AddFontFromFileTTF((path / xorstr_("msyh.ttc")).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesChineseFull());
 			cfg.MergeMode = false;
-			cheatManager.logger->addLog("Fonts loaded!\n");
+			cheatManager.logger->addLog(xorstr_("Fonts loaded!\n"));
 		}
 
 		ImGui_ImplWin32_Init(cheatManager.memory->window);
@@ -244,7 +223,7 @@ namespace d3d_vtable {
 			::ImGui_ImplDX9_Init(reinterpret_cast<IDirect3DDevice9*>(device));
 
 		originalWndProc = WNDPROC(::SetWindowLongPtr(cheatManager.memory->window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
-		cheatManager.logger->addLog("WndProc hooked!\n\tOriginal: 0x%X\n\tNew: 0x%X\n", &originalWndProc, &wndProc);
+		cheatManager.logger->addLog(xorstr_("WndProc hooked!\n\tOriginal: 0x%X\n\tNew: 0x%X\n"), &originalWndProc, &wndProc);
 	}
 
 	static void render(void* device, bool is_d3d11 = false) noexcept
@@ -454,12 +433,12 @@ void Hooks::install() noexcept
 		d3d_device_vmt = std::make_unique<::vmt_smart_hook>(cheatManager.memory->d3dDevice);
 		d3d_device_vmt->apply_hook<d3d_vtable::end_scene>(42);
 		d3d_device_vmt->apply_hook<d3d_vtable::reset>(16);
-		cheatManager.logger->addLog("DX9 Hooked!\n");
+		cheatManager.logger->addLog(xorstr_("DX9 Hooked!\n"));
 	} else if (cheatManager.memory->swapChain) {
 		swap_chain_vmt = std::make_unique<::vmt_smart_hook>(cheatManager.memory->swapChain);
 		swap_chain_vmt->apply_hook<d3d_vtable::dxgi_present>(8);
 		swap_chain_vmt->apply_hook<d3d_vtable::dxgi_resize_buffers>(13);
-		cheatManager.logger->addLog("DX11 Hooked!\n");
+		cheatManager.logger->addLog(xorstr_("DX11 Hooked!\n"));
 	}
 }
 

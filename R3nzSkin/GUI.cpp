@@ -11,13 +11,14 @@
 #include "utils/fnv_hash.hpp"
 #include "imgui/imgui.h"
 
+#include "Utils/xorstr.hpp"
+
 inline static void footer() noexcept
 {
-	using namespace std::string_literals;
-	static const auto buildText{ "Last Build: "s + __DATE__ + " - " + __TIME__ };
+	static const auto buildText = std::format("Last build: {} - {}", __DATE__, __TIME__); // Cant xorstr
 	ImGui::Separator();
 	ImGui::textUnformattedCentered(buildText.c_str());
-	ImGui::textUnformattedCentered("Copyright (C) 2021-2023 R3nzTheCodeGOD");
+	ImGui::textUnformattedCentered(xorstr_("Copyright (C) 2021-2023 R3nzTheCodeGOD"));
 }
 
 static void changeTurretSkin(const std::int32_t skinId, const std::int32_t team) noexcept
@@ -52,7 +53,7 @@ void GUI::render() noexcept
 	static const auto vector_getter_skin = [](void* vec, std::int32_t idx, const char** out_text) noexcept {
 		const auto& vector{ *static_cast<std::vector<SkinDatabase::skin_info>*>(vec) };
 		if (idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
-		*out_text = idx == 0 ? "Default" : vector.at(idx - 1).skin_name.c_str();
+		*out_text = idx == 0 ? "Default" : vector.at(idx - 1).skin_name.c_str();   // We cant xorstr
 		return true;
 	};
 
@@ -77,16 +78,16 @@ void GUI::render() noexcept
 		return true;
 	};
 
-	ImGui::Begin("R3nzSkin", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin(xorstr_("R3nzSkin"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize);
 	{
 		ImGui::rainbowText();
-		if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
+		if (ImGui::BeginTabBar(xorstr_("TabBar"), ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
 			if (player) {
-				if (ImGui::BeginTabItem("Local Player")) {
+				if (ImGui::BeginTabItem(xorstr_("Local Player"))) {
 					auto& values{ cheatManager.database->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)] };
-					ImGui::Text("Player Skins Settings:");
+					ImGui::Text(xorstr_("Player Skins Settings:"));
 
-					if (ImGui::Combo("Current Skin", &cheatManager.config->current_combo_skin_index, vector_getter_skin, static_cast<void*>(&values), values.size() + 1))
+					if (ImGui::Combo(xorstr_("Current Skin"), &cheatManager.config->current_combo_skin_index, vector_getter_skin, static_cast<void*>(&values), values.size() + 1))
 						if (cheatManager.config->current_combo_skin_index > 0)
 							player->change_skin(values[cheatManager.config->current_combo_skin_index - 1].model_name, values[cheatManager.config->current_combo_skin_index - 1].skin_id);
 					
@@ -101,22 +102,22 @@ void GUI::render() noexcept
 						const auto stack{ player->get_character_data_stack() };
 						gear = stack->base_skin.gear;
 
-						if (ImGui::Combo("Current Gear", &gear, vector_getter_gear, static_cast<void*>(&it->gears), it->gears.size())) {
+						if (ImGui::Combo(xorstr_("Current Gear"), &gear, vector_getter_gear, static_cast<void*>(&it->gears), it->gears.size())) {
 							player->get_character_data_stack()->base_skin.gear = static_cast<std::int8_t>(gear);
 							player->get_character_data_stack()->update(true);
 						}
 						ImGui::Separator();
 					}
 
-					if (ImGui::Combo("Current Ward Skin", &cheatManager.config->current_combo_ward_index, vector_getter_ward_skin, static_cast<void*>(&cheatManager.database->wards_skins), cheatManager.database->wards_skins.size() + 1))
+					if (ImGui::Combo(xorstr_("Current Ward Skin"), &cheatManager.config->current_combo_ward_index, vector_getter_ward_skin, static_cast<void*>(&cheatManager.database->wards_skins), cheatManager.database->wards_skins.size() + 1))
 						cheatManager.config->current_ward_skin_index = cheatManager.config->current_combo_ward_index == 0 ? -1 : cheatManager.database->wards_skins.at(cheatManager.config->current_combo_ward_index - 1).first;
 					footer();
 					ImGui::EndTabItem();
 				}
 			}
 
-			if (ImGui::BeginTabItem("Other Champs")) {
-				ImGui::Text("Other Champs Skins Settings:");
+			if (ImGui::BeginTabItem(xorstr_("Other Champs"))) {
+				ImGui::Text(xorstr_("Other Champs Skins Settings:"));
 				std::int32_t last_team{ 0 };
 				for (auto i{ 0u }; i < heroes->length; ++i) {
 					const auto hero{ heroes->list[i] };
@@ -135,16 +136,16 @@ void GUI::render() noexcept
 						if (last_team != 0)
 							ImGui::Separator();
 						if (is_enemy)
-							ImGui::Text(" Enemy champions");
+							ImGui::Text(xorstr_(" Enemy champions"));
 						else
-							ImGui::Text(" Ally champions");
+							ImGui::Text(xorstr_(" Ally champions"));
 						last_team = hero_team;
 					}
 
 					auto& config_array{ is_enemy ? cheatManager.config->current_combo_enemy_skin_index : cheatManager.config->current_combo_ally_skin_index };
 					const auto config_entry{ config_array.insert({ champion_name_hash, 0 }) };
 
-					std::snprintf(this->str_buffer, sizeof(this->str_buffer), cheatManager.config->heroName ? "HeroName: [ %s ]##%X" : "PlayerName: [ %s ]##%X", cheatManager.config->heroName ? hero->get_character_data_stack()->base_skin.model.str : hero->get_name()->c_str(), reinterpret_cast<std::uintptr_t>(hero));
+					std::snprintf(this->str_buffer, sizeof(this->str_buffer), cheatManager.config->heroName ? xorstr_("HeroName: [ %s ]##%X") : xorstr_("PlayerName: [ %s ]##%X"), cheatManager.config->heroName ? hero->get_character_data_stack()->base_skin.model.str : hero->get_name()->c_str(), reinterpret_cast<std::uintptr_t>(hero));
 
 					auto& values{ cheatManager.database->champions_skins[champion_name_hash] };
 					if (ImGui::Combo(str_buffer, &config_entry.first->second, vector_getter_skin, static_cast<void*>(&values), values.size() + 1))
@@ -155,19 +156,19 @@ void GUI::render() noexcept
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Global Skins")) {
-				ImGui::Text("Global Skins Settings:");
-				if (ImGui::Combo("Minion Skins:", &cheatManager.config->current_combo_minion_index, vector_getter_default, static_cast<void*>(&cheatManager.database->minions_skins), cheatManager.database->minions_skins.size() + 1))
+			if (ImGui::BeginTabItem(xorstr_("Global Skins"))) {
+				ImGui::Text(xorstr_("Global Skins Settings:"));
+				if (ImGui::Combo(xorstr_("Minion Skins:"), &cheatManager.config->current_combo_minion_index, vector_getter_default, static_cast<void*>(&cheatManager.database->minions_skins), cheatManager.database->minions_skins.size() + 1))
 					cheatManager.config->current_minion_skin_index = cheatManager.config->current_combo_minion_index - 1;
 				ImGui::Separator();
-				if (ImGui::Combo("Order Turret Skins:", &cheatManager.config->current_combo_order_turret_index, vector_getter_default, static_cast<void*>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1))
+				if (ImGui::Combo(xorstr_("Order Turret Skins:"), &cheatManager.config->current_combo_order_turret_index, vector_getter_default, static_cast<void*>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1))
 					changeTurretSkin(cheatManager.config->current_combo_order_turret_index - 1, 100);
-				if (ImGui::Combo("Chaos Turret Skins:", &cheatManager.config->current_combo_chaos_turret_index, vector_getter_default, static_cast<void*>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1))
+				if (ImGui::Combo(xorstr_("Chaos Turret Skins:"), &cheatManager.config->current_combo_chaos_turret_index, vector_getter_default, static_cast<void*>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1))
 					changeTurretSkin(cheatManager.config->current_combo_chaos_turret_index - 1, 200);
 				ImGui::Separator();
-				ImGui::Text("Jungle Mobs Skins Settings:");
+				ImGui::Text(xorstr_("Jungle Mobs Skins Settings:"));
 				for (auto& it : cheatManager.database->jungle_mobs_skins) {
-					std::snprintf(str_buffer, 256, "Current %s skin", it.name);
+					std::snprintf(str_buffer, 256, xorstr_("Current %s skin"), it.name);
 					const auto config_entry{ cheatManager.config->current_combo_jungle_mob_skin_index.insert({ it.name_hashes.front(), 0 }) };
 					if (ImGui::Combo(str_buffer, &config_entry.first->second, vector_getter_default, static_cast<void*>(&it.skins), it.skins.size() + 1))
 						for (const auto& hash : it.name_hashes)
@@ -177,29 +178,29 @@ void GUI::render() noexcept
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Logger")) {
+			if (ImGui::BeginTabItem(xorstr_("Logger"))) {
 				cheatManager.logger->draw();
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Extras")) {
-				ImGui::hotkey("Menu Key", cheatManager.config->menuKey);
-				ImGui::Checkbox(cheatManager.config->heroName ? "HeroName based" : "PlayerName based", &cheatManager.config->heroName);
-				ImGui::Checkbox("Rainbow Text", &cheatManager.config->rainbowText);
-				ImGui::Checkbox("Quick Skin Change", &cheatManager.config->quickSkinChange);
-				ImGui::hoverInfo("It allows you to change skin without opening the menu with the key you assign from the keyboard.");
+			if (ImGui::BeginTabItem(xorstr_("Extras"))) {
+				ImGui::hotkey(xorstr_("Menu Key"), cheatManager.config->menuKey);
+				ImGui::Checkbox(cheatManager.config->heroName ? xorstr_("HeroName based") : xorstr_("PlayerName based"), &cheatManager.config->heroName);
+				ImGui::Checkbox(xorstr_("Rainbow Text"), &cheatManager.config->rainbowText);
+				ImGui::Checkbox(xorstr_("Quick Skin Change"), &cheatManager.config->quickSkinChange);
+				ImGui::hoverInfo(xorstr_("It allows you to change skin without opening the menu with the key you assign from the keyboard."));
 
 				if (cheatManager.config->quickSkinChange) {
 					ImGui::Separator();
-					ImGui::hotkey("Previous Skin Key", cheatManager.config->previousSkinKey);
-					ImGui::hotkey("Next Skin Key", cheatManager.config->nextSkinKey);
+					ImGui::hotkey(xorstr_("Previous Skin Key"), cheatManager.config->previousSkinKey);
+					ImGui::hotkey(xorstr_("Next Skin Key"), cheatManager.config->nextSkinKey);
 					ImGui::Separator();
 				}
 
 				if (player)
-					ImGui::InputText("Change Nick", player->get_name());
+					ImGui::InputText(xorstr_("Change Nick"), player->get_name());
 
-				if (ImGui::Button("No skins except local player")) {
+				if (ImGui::Button(xorstr_("No skins except local player"))) {
 					for (auto& enemy : cheatManager.config->current_combo_enemy_skin_index)
 						enemy.second = 1;
 
@@ -211,9 +212,9 @@ void GUI::render() noexcept
 						if (hero != player)
 							hero->change_skin(hero->get_character_data_stack()->base_skin.model.str, 0);
 					}
-				} ImGui::hoverInfo("Sets the skins of all champions except the local player to the default skin.");
+				} ImGui::hoverInfo(xorstr_("Sets the skins of all champions except the local player to the default skin."));
 
-				if (ImGui::Button("Random Skins")) {
+				if (ImGui::Button(xorstr_("Random Skins"))) {
 					for (auto i{ 0u }; i < heroes->length; ++i) {
 						const auto hero{ heroes->list[i] };
 						const auto championHash{ fnv::hash_runtime(hero->get_character_data_stack()->base_skin.model.str) };
@@ -234,17 +235,17 @@ void GUI::render() noexcept
 							hero->change_skin(skinDatabase[data - 1].model_name, skinDatabase[data - 1].skin_id);
 						}
 					}
-				} ImGui::hoverInfo("Randomly changes the skin of all champions.");
+				} ImGui::hoverInfo(xorstr_("Randomly changes the skin of all champions."));
 
-				ImGui::SliderFloat("Font Scale", &cheatManager.config->fontScale, 1.0f, 2.0f, "%.3f");
+				ImGui::SliderFloat(xorstr_("Font Scale"), &cheatManager.config->fontScale, 1.0f, 2.0f, "%.3f");
 				if (ImGui::GetIO().FontGlobalScale != cheatManager.config->fontScale) {
 					ImGui::GetIO().FontGlobalScale = cheatManager.config->fontScale;
-				} ImGui::hoverInfo("Changes the menu font scale.");
+				} ImGui::hoverInfo(xorstr_("Changes the menu font scale."));
 				
-				if (ImGui::Button("Force Close"))
+				if (ImGui::Button(xorstr_("Force Close")))
 					cheatManager.hooks->uninstall();
-				ImGui::hoverInfo("You will be returned to the reconnect screen.");
-				ImGui::Text("FPS: %.0f FPS", ImGui::GetIO().Framerate);
+				ImGui::hoverInfo(xorstr_("You will be returned to the reconnect screen."));
+				ImGui::Text(xorstr_("FPS: %.0f FPS"), ImGui::GetIO().Framerate);
 				footer();
 				ImGui::EndTabItem();
 			}

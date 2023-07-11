@@ -11,6 +11,8 @@
 #include "Memory.hpp"
 #include "Offsets.hpp"
 
+#include "Utils/xorstr.hpp"
+
 [[nodiscard]] static std::uint8_t* find_signature(const wchar_t* szModule, const char* szSignature) noexcept
 {
 	const auto module{ ::GetModuleHandle(szModule) };
@@ -123,7 +125,7 @@ void Memory::Search(bool gameClient)
 					auto address{ find_signature(nullptr, pattern.c_str()) };
 
 					if (!address) {
-						::MessageBoxA(nullptr, ("Failed to find pattern: " + pattern).c_str(), "R3nzSkin", MB_OK | MB_ICONWARNING);
+						::MessageBoxA(nullptr, (xorstr_("Failed to find pattern: ") + pattern).c_str(), xorstr_("R3nzSkin"), MB_OK | MB_ICONWARNING);
 						// cheatManager.logger->addLog("Not found: %s\n", pattern.c_str());
 						continue;
 					}
@@ -158,6 +160,6 @@ void Memory::Search(bool gameClient)
 		}
 		this->update(gameClient);
 	} catch (const std::exception& e) {
-		::MessageBoxA(nullptr, e.what(), "R3nzSkin", MB_OK | MB_ICONWARNING);
+		::MessageBoxA(nullptr, e.what(), xorstr_("R3nzSkin"), MB_OK | MB_ICONWARNING);
 	}
 }

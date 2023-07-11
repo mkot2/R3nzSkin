@@ -11,6 +11,8 @@
 #include "Memory.hpp"
 #include "utils/Utils.hpp"
 
+#include "utils/xorstr.hpp"
+
 void Config::init() noexcept
 {
 	if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
@@ -18,7 +20,7 @@ void Config::init() noexcept
 		CoTaskMemFree(pathToDocuments);
 	}
 
-	this->path /= "R3nzSkin";
+	this->path /= xorstr_("R3nzSkin");
 }
 
 void Config::save() noexcept
@@ -26,33 +28,33 @@ void Config::save() noexcept
 	const auto player{ cheatManager.memory->localPlayer };
 	std::error_code ec;
 	std::filesystem::create_directory(this->path, ec);
-	auto out{ std::ofstream(this->path / u8"R3nzSkin64")};
+	auto out{ std::ofstream(this->path / xorstr_(u8"R3nzSkin64"))};
 
 	if (!out.good())
 		return;
 
 	if (player)
-		config_json[std::string(player->get_character_data_stack()->base_skin.model.str) + ".current_combo_skin_index"] = this->current_combo_skin_index;
+		config_json[std::string(player->get_character_data_stack()->base_skin.model.str) + xorstr_(".current_combo_skin_index")] = this->current_combo_skin_index;
 
-	config_json["menuKey"] = this->menuKey.toString();
-	config_json["nextSkinKey"] = this->nextSkinKey.toString();
-	config_json["previousSkinKey"] = this->previousSkinKey.toString();
-	config_json["heroName"] = this->heroName;
-	config_json["raibowText"] = this->rainbowText;
-	config_json["quickSkinChange"] = this->quickSkinChange;
-	config_json["fontScale"] = this->fontScale;
-	config_json["current_combo_ward_index"] = this->current_combo_ward_index;
-	config_json["current_ward_skin_index"] = this->current_ward_skin_index;
-	config_json["current_minion_skin_index"] = this->current_minion_skin_index;
+	config_json[xorstr_("menuKey")] = this->menuKey.toString();
+	config_json[xorstr_("nextSkinKey")] = this->nextSkinKey.toString();
+	config_json[xorstr_("previousSkinKey")] = this->previousSkinKey.toString();
+	config_json[xorstr_("heroName")] = this->heroName;
+	config_json[xorstr_("raibowText")] = this->rainbowText;
+	config_json[xorstr_("quickSkinChange")] = this->quickSkinChange;
+	config_json[xorstr_("fontScale")] = this->fontScale;
+	config_json[xorstr_("current_combo_ward_index")] = this->current_combo_ward_index;
+	config_json[xorstr_("current_ward_skin_index")] = this->current_ward_skin_index;
+	config_json[xorstr_("current_minion_skin_index")] = this->current_minion_skin_index;
 
 	for (const auto& it : this->current_combo_ally_skin_index)
-		config_json["current_combo_ally_skin_index"][std::to_string(it.first)] = it.second;
+		config_json[xorstr_("current_combo_ally_skin_index")][std::to_string(it.first)] = it.second;
 
 	for (const auto& it : this->current_combo_enemy_skin_index)
-		config_json["current_combo_enemy_skin_index"][std::to_string(it.first)] = it.second;
+		config_json[xorstr_("current_combo_enemy_skin_index")][std::to_string(it.first)] = it.second;
 
 	for (const auto& it : this->current_combo_jungle_mob_skin_index)
-		config_json["current_combo_jungle_mob_skin_index"][std::to_string(it.first)] = it.second;
+		config_json[xorstr_("current_combo_jungle_mob_skin_index")][std::to_string(it.first)] = it.second;
 
 	out << config_json.dump();
 	out.close();
@@ -61,7 +63,7 @@ void Config::save() noexcept
 void Config::load() noexcept
 {
 	const auto player{ cheatManager.memory->localPlayer };
-	auto in{ std::ifstream(this->path / u8"R3nzSkin64") };
+	auto in{ std::ifstream(this->path / xorstr_(u8"R3nzSkin64")) };
 
 	if (!in.good())
 		return;
@@ -72,30 +74,30 @@ void Config::load() noexcept
 		config_json = j;
 
 	if (player)
-		this->current_combo_skin_index = config_json.value(std::string(player->get_character_data_stack()->base_skin.model.str) + ".current_combo_skin_index", 0);
+		this->current_combo_skin_index = config_json.value(std::string(player->get_character_data_stack()->base_skin.model.str) + xorstr_(".current_combo_skin_index"), 0);
 
-	this->menuKey = KeyBind(config_json.value("menuKey", "INSERT").c_str());
-	this->nextSkinKey = KeyBind(config_json.value("nextSkinKey", "PAGE_UP").c_str());
-	this->previousSkinKey = KeyBind(config_json.value("previousSkinKey", "PAGE_DOWN").c_str());
-	this->heroName = config_json.value("heroName", true);
-	this->rainbowText = config_json.value("raibowText", false);
-	this->quickSkinChange = config_json.value("quickSkinChange", false);
-	this->fontScale = config_json.value("fontScale", 1.0f);
-	this->current_combo_ward_index = config_json.value("current_combo_ward_index", 0);
-	this->current_ward_skin_index = config_json.value("current_ward_skin_index", -1);
-	this->current_minion_skin_index = config_json.value("current_minion_skin_index", -1);
+	this->menuKey = KeyBind(config_json.value(xorstr_("menuKey"), xorstr_("INSERT")).c_str());
+	this->nextSkinKey = KeyBind(config_json.value(xorstr_("nextSkinKey"), xorstr_("PAGE_UP")).c_str());
+	this->previousSkinKey = KeyBind(config_json.value(xorstr_("previousSkinKey"), xorstr_("PAGE_DOWN")).c_str());
+	this->heroName = config_json.value(xorstr_("heroName"), true);
+	this->rainbowText = config_json.value(xorstr_("raibowText"), false);
+	this->quickSkinChange = config_json.value(xorstr_("quickSkinChange"), false);
+	this->fontScale = config_json.value(xorstr_("fontScale"), 1.0f);
+	this->current_combo_ward_index = config_json.value(xorstr_("current_combo_ward_index"), 0);
+	this->current_ward_skin_index = config_json.value(xorstr_("current_ward_skin_index"), -1);
+	this->current_minion_skin_index = config_json.value(xorstr_("current_minion_skin_index"), -1);
 
-	const auto ally_skins{ config_json.find("current_combo_ally_skin_index") };
+	const auto ally_skins{ config_json.find(xorstr_("current_combo_ally_skin_index")) };
 	if (ally_skins != config_json.end())
 		for (const auto& it : ally_skins.value().items())
 			this->current_combo_ally_skin_index[std::stoull(it.key())] = it.value().get<std::int32_t>();
 
-	const auto enemy_skins{ config_json.find("current_combo_enemy_skin_index") };
+	const auto enemy_skins{ config_json.find(xorstr_("current_combo_enemy_skin_index")) };
 	if (enemy_skins != config_json.end())
 		for (const auto& it : enemy_skins.value().items())
 			this->current_combo_enemy_skin_index[std::stoull(it.key())] = it.value().get<std::int32_t>();
 
-	const auto jungle_mobs_skins{ config_json.find("current_combo_jungle_mob_skin_index") };
+	const auto jungle_mobs_skins{ config_json.find(xorstr_("current_combo_jungle_mob_skin_index")) };
 	if (jungle_mobs_skins != config_json.end())
 		for (const auto& it : jungle_mobs_skins.value().items())
 			this->current_combo_jungle_mob_skin_index[std::stoull(it.key())] = it.value().get<std::int32_t>();
