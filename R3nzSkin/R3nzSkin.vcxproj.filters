@@ -4,9 +4,6 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{6e1c3fe0-7b4e-4ddc-b0af-ef2565509bab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Json">
-      <UniqueIdentifier>{24604dbf-d26d-4752-9537-7815e59a2e32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -34,6 +31,12 @@
     </Filter>
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{840d95cb-9ecd-469f-87e5-2072db8e5448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCG">
+      <UniqueIdentifier>{f3b7cc9e-adf7-4c01-894b-71d877bdae17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nlohmann">
+      <UniqueIdentifier>{24604dbf-d26d-4752-9537-7815e59a2e32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +141,7 @@
       <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="json\json.hpp">
-      <Filter>Json</Filter>
+      <Filter>nlohmann</Filter>
     </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Source Files\Config</Filter>
@@ -218,6 +221,15 @@
     </ClInclude>
     <ClInclude Include="imgui\imgui_user.h">
       <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg\pcg_extras.hpp">
+      <Filter>PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg\pcg_random.hpp">
+      <Filter>PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg\pcg_uint128.hpp">
+      <Filter>PCG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

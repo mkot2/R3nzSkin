@@ -5,6 +5,8 @@
 #include <random>
 #include <string>
 
+#include "../pcg/pcg_random.hpp"
+
 class RandomGenerator {
 public:
     template <std::integral T>
@@ -27,7 +29,8 @@ public:
         return static_cast<T>(random(static_cast<std::underlying_type_t<T>>(min), static_cast<std::underlying_type_t<T>>(max)));
     }
 private:
-    inline static std::mt19937 gen{ std::random_device{}() };
+    inline static pcg_extras::seed_seq_from<std::random_device> seed_source;
+    inline static pcg32_c1024_fast gen{ seed_source };
     inline static std::mutex mutex;
 };
 
