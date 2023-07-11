@@ -23,7 +23,7 @@ void SkinDatabase::load() noexcept
 
 		std::map<std::string, std::int32_t> temp_skin_list;
 		for (const auto& i : skins_ids) {
-			const auto skin_display_name{ std::string(xorstr_("game_character_skin_displayname_")) + champion->champion_name.str + xorstr_("_") + std::to_string(i) };
+			const auto skin_display_name{ xorstr_std("game_character_skin_displayname_") + champion->champion_name.str + xorstr_("_") + std::to_string(i) };
 			auto skin_display_name_translated{ i > 0 ? std::string(cheatManager.memory->translateString(skin_display_name.c_str())) : std::string(champion->champion_name.str) };
 
 			if (skin_display_name_translated == skin_display_name)

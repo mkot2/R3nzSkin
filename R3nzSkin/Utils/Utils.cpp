@@ -124,6 +124,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "]", VK_OEM_6 },
     { "`", VK_OEM_3 }
 });
+// We probably dont need to xorstr this
 
 static_assert(keyMap.size() == KeyBind::MAX);
 static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));

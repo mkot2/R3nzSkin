@@ -15,7 +15,8 @@
 
 inline static void footer() noexcept
 {
-	static const auto buildText = std::format("Last build: {} - {}", __DATE__, __TIME__); // Cant xorstr
+	// Clowning for xorstr
+	static const auto buildText = std::vformat(std::string_view(xorstr_("Last build: {} - {}")), std::make_format_args(__DATE__, __TIME__));
 	ImGui::Separator();
 	ImGui::textUnformattedCentered(buildText.c_str());
 	ImGui::textUnformattedCentered(xorstr_("Copyright (C) 2021-2023 R3nzTheCodeGOD"));
@@ -50,17 +51,19 @@ void GUI::render() noexcept
 	static const auto my_team{ player ? player->get_team() : 100 };
 	static int gear{ player ? player->get_character_data_stack()->base_skin.gear : 0 };
 
+	static const auto defaultTxt = xorstr_std("Default");
+
 	static const auto vector_getter_skin = [](void* vec, std::int32_t idx, const char** out_text) noexcept {
 		const auto& vector{ *static_cast<std::vector<SkinDatabase::skin_info>*>(vec) };
 		if (idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
-		*out_text = idx == 0 ? "Default" : vector.at(idx - 1).skin_name.c_str();   // We cant xorstr
+		*out_text = idx == 0 ? defaultTxt.c_str() : vector.at(idx - 1).skin_name.c_str();
 		return true;
 	};
 
 	static const auto vector_getter_ward_skin = [](void* vec, std::int32_t idx, const char** out_text) noexcept {
 		const auto& vector{ *static_cast<std::vector<std::pair<std::int32_t, const char*>>*>(vec) };
 		if (idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
-		*out_text = idx == 0 ? "Default" : vector.at(idx - 1).second;
+		*out_text = idx == 0 ? defaultTxt.c_str() : vector.at(idx - 1).second;
 		return true;
 	};
 
@@ -74,7 +77,7 @@ void GUI::render() noexcept
 	static auto vector_getter_default = [](void* vec, std::int32_t idx, const char** out_text) noexcept {
 		const auto& vector{ *static_cast<std::vector<const char*>*>(vec) };
 		if (idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
-		*out_text = idx == 0 ? "Default" : vector.at(idx - 1);
+		*out_text = idx == 0 ? defaultTxt.c_str() : vector.at(idx - 1);
 		return true;
 	};
 
