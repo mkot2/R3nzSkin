@@ -23,7 +23,7 @@ bool WINAPI HideThread(const HANDLE hThread) noexcept
 {
 	__try {
 		using FnSetInformationThread = NTSTATUS(NTAPI*)(HANDLE ThreadHandle, UINT ThreadInformationClass, PVOID ThreadInformation, ULONG ThreadInformationLength);
-		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(LI_FN(GetProcAddress)(LI_FN(GetModuleHandle)(xorstr_(L"ntdll.dll")), xorstr_("NtSetInformationThread"))) };
+		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(LI_FN(GetProcAddress)(LI_FN(GetModuleHandle)(xorstr_("ntdll.dll")), xorstr_("NtSetInformationThread"))) };
 
 		if (!NtSetInformationThread)
 			return false;
