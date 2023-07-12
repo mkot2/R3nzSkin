@@ -20,7 +20,7 @@
 // TODO: Get rid of this shit
 [[nodiscard]] static std::uint8_t* find_signature(const char* szModule, const char* szSignature) noexcept
 {
-	const auto module{ LI_FN(GetModuleHandle)(szModule) };
+	const auto module{ GetModuleHandle(szModule) };
 
 	using bytes_t = std::vector<std::int32_t>;
 
