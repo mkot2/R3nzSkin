@@ -1,6 +1,6 @@
 #include "imgui_user.h"
 #include "../CheatManager.hpp"
-#include "../Utils/xorstr.hpp"
+#include "../Utils/obfuscate.h"
 
 void ImGui::textUnformattedCentered(const char* text) noexcept
 {
@@ -98,7 +98,7 @@ void ImGui::hotkey(const char* label, KeyBind& key, float samelineOffset, const 
 
     if (GetActiveID() == id) {
         PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
-        Button(xorstr_("..."), size);
+        Button("..."_o, size);
         PopStyleColor();
 
         GetCurrentContext()->ActiveIdAllowOverlap = true;

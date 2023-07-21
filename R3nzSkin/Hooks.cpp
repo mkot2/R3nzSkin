@@ -12,7 +12,7 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 #include "utils/vmt_smart_hook.hpp"
-#include "Utils/xorstr.hpp"
+#include "Utils/obfuscate.h"
 
 #include "CheatManager.hpp"
 #include "Hooks.hpp"
@@ -124,7 +124,7 @@ namespace d3d_vtable {
 	static void init_imgui(void* device, bool is_d3d11 = false) noexcept
 	{
 		cheatManager.database->load();
-		cheatManager.logger->addLog(xorstr_("All skins loaded from memory!\n"));
+		cheatManager.logger->addLog("All skins loaded from memory!\n"_o);
 		ImGui::CreateContext();
 		auto& style{ ImGui::GetStyle() };
 
@@ -213,12 +213,12 @@ namespace d3d_vtable {
 			::CoTaskMemFree(pathToFonts);
 			ImFontConfig cfg;
 			cfg.SizePixels = 15.0f;
-			io.Fonts->AddFontFromFileTTF((path / xorstr_("tahoma.ttf")).string().c_str(), cfg.SizePixels, &cfg, tahomaRanges);
+			io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf"_o).string().c_str(), cfg.SizePixels, &cfg, tahomaRanges);
 			cfg.MergeMode = true;
-			io.Fonts->AddFontFromFileTTF((path / xorstr_("malgun.ttf")).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesKorean());
-			io.Fonts->AddFontFromFileTTF((path / xorstr_("msyh.ttc")).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesChineseFull());
+			io.Fonts->AddFontFromFileTTF((path / "malgun.ttf"_o).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesKorean());
+			io.Fonts->AddFontFromFileTTF((path / "msyh.ttc"_o).string().c_str(), cfg.SizePixels, &cfg, io.Fonts->GetGlyphRangesChineseFull());
 			cfg.MergeMode = false;
-			cheatManager.logger->addLog(xorstr_("Fonts loaded!\n"));
+			cheatManager.logger->addLog("Fonts loaded!\n"_o);
 		}
 
 		ImGui_ImplWin32_Init(cheatManager.memory->window);
@@ -234,7 +234,7 @@ namespace d3d_vtable {
 			::ImGui_ImplDX9_Init(reinterpret_cast<IDirect3DDevice9*>(device));
 
 		originalWndProc = WNDPROC(::SetWindowLongPtr(cheatManager.memory->window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
-		cheatManager.logger->addLog(xorstr_("WndProc hooked!\n\tOriginal: 0x%X\n\tNew: 0x%X\n"), &originalWndProc, &wndProc);
+		cheatManager.logger->addLog("WndProc hooked!\n\tOriginal: 0x%X\n\tNew: 0x%X\n"_o, &originalWndProc, &wndProc);
 	}
 
 	static void render(void* device, bool is_d3d11 = false) noexcept
@@ -416,7 +416,7 @@ void Hooks::init() noexcept
 			if (hash == FNV("JammerDevice") || hash == FNV("SightWard") || hash == FNV("YellowTrinket") || hash == FNV("VisionWard") || hash == FNV("BlueTrinket") || hash == FNV("TestCubeRender10Vision")) {
 				if (!player || owner == player) {
 					if (hash == FNV("TestCubeRender10Vision") && playerHash == FNV("Yone"))
-						changeModelForObject(minion, "Yone", owner->get_character_data_stack()->base_skin.skin);
+						changeModelForObject(minion, "Yone"_o, owner->get_character_data_stack()->base_skin.skin);
 					else if (hash == FNV("TestCubeRender10Vision"))
 						changeSkinForObject(minion, 0);
 					else
@@ -444,12 +444,12 @@ void Hooks::install() noexcept
 		d3d_device_vmt = std::make_unique<::vmt_smart_hook>(cheatManager.memory->d3dDevice);
 		d3d_device_vmt->apply_hook<d3d_vtable::end_scene>(42);
 		d3d_device_vmt->apply_hook<d3d_vtable::reset>(16);
-		cheatManager.logger->addLog(xorstr_("DX9 Hooked!\n"));
+		cheatManager.logger->addLog("DX9 Hooked!\n"_o);
 	} else if (cheatManager.memory->swapChain) {
 		swap_chain_vmt = std::make_unique<::vmt_smart_hook>(cheatManager.memory->swapChain);
 		swap_chain_vmt->apply_hook<d3d_vtable::dxgi_present>(8);
 		swap_chain_vmt->apply_hook<d3d_vtable::dxgi_resize_buffers>(13);
-		cheatManager.logger->addLog(xorstr_("DX11 Hooked!\n"));
+		cheatManager.logger->addLog("DX11 Hooked!\n"_o);
 	}
 }
 

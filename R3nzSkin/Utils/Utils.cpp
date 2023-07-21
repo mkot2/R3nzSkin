@@ -9,7 +9,6 @@
 
 #include "../CheatManager.hpp"
 #include "Utils.hpp"
-#include "xorstr.hpp"
 
 struct Key {
     constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }

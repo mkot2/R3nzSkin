@@ -11,11 +11,8 @@
 #include "Memory.hpp"
 #include "Offsets.hpp"
 
-#include "mem/pattern.h"
-#include "mem/module.h"
-
 #include "Utils/lazy_importer.hpp"
-#include "Utils/xorstr.hpp"
+#include "Utils/obfuscate.h"
 
 [[nodiscard]] static std::uint8_t* find_signature(const char* szModule, const char* szSignature) noexcept
 {
@@ -129,13 +126,13 @@ void Memory::Search(bool gameClient)
 					auto address{ find_signature(nullptr, pattern.c_str()) };
 
 					if (!address) {
-						::MessageBoxA(nullptr, (xorstr_("Failed to find pattern: ") + pattern).c_str(), xorstr_("R3nzSkin"), MB_OK | MB_ICONWARNING);
-						// cheatManager.logger->addLog("Not found: %s\n", pattern.c_str());
+						::MessageBoxA(nullptr, ("Failed to find pattern: "_o + pattern).c_str(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
+						// cheatManager.logger->addLog("Not found: %s\n"_o, pattern.c_str());
 						continue;
 					}
 
 					if (sig.read)
-						address = *reinterpret_cast<std::uint8_t**>(address + (pattern.find_first_of("?") / 3));
+						address = *reinterpret_cast<std::uint8_t**>(address + (pattern.find_first_of("?"_o) / 3));
 					else if (sig.relative)
 						address = address + *reinterpret_cast<std::uint32_t*>(address + 3) + 7;
 					else if (address[0] == 0xE8)
@@ -147,7 +144,7 @@ void Memory::Search(bool gameClient)
 					address += sig.additional;
 
 					*sig.offset = reinterpret_cast<std::uint32_t>(address);
-					// cheatManager.logger->addLog("Found: %s\n\tAddress: 0x%X\n", pattern.c_str(), *sig.offset);
+					// cheatManager.logger->addLog("Found: %s\n\tAddress: 0x%X\n"_o, pattern.c_str(), *sig.offset);
 					break;
 				}
 
@@ -164,6 +161,6 @@ void Memory::Search(bool gameClient)
 		}
 		this->update(gameClient);
 	} catch (const std::exception& e) {
-		::MessageBoxA(nullptr, e.what(), xorstr_("R3nzSkin"), MB_OK | MB_ICONWARNING);
+		::MessageBoxA(nullptr, e.what(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
 	}
 }

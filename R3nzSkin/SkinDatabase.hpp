@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 
+#include "Utils/obfuscate.h"
 #include "utils/fnv_hash.hpp"
  
 class SkinDatabase {
@@ -37,62 +38,62 @@ public:
 	std::vector<std::pair<std::uint32_t, const char*>> wards_skins;
 
 	std::vector<const char*> minions_skins {
-		"Minion", "Summer Minion",
-		"Project Minion", "Snowdown Minion",
-		"Draven Minion", "Star Guardian Minion",
-		"Arcade Minion", "Snowdown 2 Minion",
-		"Odyssey Minion", "Mouse Minion", "Arcane Minion"
+		"Minion"_o, "Summer Minion"_o,
+		"Project Minion"_o, "Snowdown Minion"_o,
+		"Draven Minion"_o, "Star Guardian Minion"_o,
+		"Arcade Minion"_o, "Snowdown 2 Minion"_o,
+		"Odyssey Minion"_o, "Mouse Minion"_o, "Arcane Minion"_o
 	};
 
 	std::vector<const char*> turret_skins {
-		"Default Order Turret", "Default Chaos Turret",
-		"Snow Order Turret", "Snow Chaos Turret",
-		"Twisted Treeline Order Turret", "Twisted Treeline Chaos Turret",
-		"URF Order Turret", "URF Chaos Turret",
-		"Arcade Turret",
-		"Temple of Lily and Lotus Turret",
-		"Arcane Order Turret", "Arcane Chaos Turret",
-		"Butcher's Bridge Order Turret", "Butcher's Bridge Chaos Turret",
-		"Howling Abyss Order Turret", "Howling Abyss Chaos Turret"
+		"Default Order Turret"_o, "Default Chaos Turret"_o,
+		"Snow Order Turret"_o, "Snow Chaos Turret"_o,
+		"Twisted Treeline Order Turret"_o, "Twisted Treeline Chaos Turret"_o,
+		"URF Order Turret"_o, "URF Chaos Turret"_o,
+		"Arcade Turret"_o,
+		"Temple of Lily and Lotus Turret"_o,
+		"Arcane Order Turret"_o, "Arcane Chaos Turret"_o,
+		"Butcher's Bridge Order Turret"_o, "Butcher's Bridge Chaos Turret"_o,
+		"Howling Abyss Order Turret"_o, "Howling Abyss Chaos Turret"_o
 	};
 
 	std::vector<jungle_mob_skin_info> jungle_mobs_skins {
 		{
-			"Baron",
+			"Baron"_o,
 			{ FNV("SRU_Baron") },
-			{ "Baron", "Snowdown Baron", "Championship Baron", "Lunar Revel Baron", "MSI Baron", "Odyssey Baron", "Championship Birthday Baron", "Ruined King Baron" }
+			{ "Baron"_o, "Snowdown Baron"_o, "Championship Baron"_o, "Lunar Revel Baron"_o, "MSI Baron"_o, "Odyssey Baron"_o, "Championship Birthday Baron"_o, "Ruined King Baron"_o }
 		},
 		{
-			"Blue",
+			"Blue"_o,
 			{ FNV("SRU_Blue") },
-			{ "Blue", "Dark Blue", "Pool Party Blue", "Ruined King Blue" }
+			{ "Blue"_o, "Dark Blue"_o, "Pool Party Blue"_o, "Ruined King Blue"_o }
 		},
 		{
-			"Red",
+			"Red"_o,
 			{ FNV("SRU_Red") },
-			{ "Red", "Pool Party Red", "Ruined King Red" }
+			{ "Red"_o, "Pool Party Red"_o, "Ruined King Red"_o }
 		},
 		{
-			"Scuttle",
+			"Scuttle"_o,
 			{ FNV("Sru_Crab") },
-			{ "Scuttle", "Halloween Light Scuttle", "Halloween Dark Scuttle", "Ruined King Scuttle" }
+			{ "Scuttle"_o, "Halloween Light Scuttle"_o, "Halloween Dark Scuttle"_o, "Ruined King Scuttle"_o }
 		},
 		{
-			"Krug",
+			"Krug"_o,
 			{ FNV("SRU_Krug"), FNV("SRU_KrugMini"), FNV("SRU_KrugMiniMini") },
-			{ "Krug", "Dark Krug" }
+			{ "Krug"_o, "Dark Krug"_o }
 		},
 		{
-			"Razorbeak",
+			"Razorbeak"_o,
 			{ FNV("SRU_Razorbeak"), FNV("SRU_RazorbeakMini") },
-			{ "Razorbeak", "Chicken Razorbeak" }
+			{ "Razorbeak"_o, "Chicken Razorbeak"_o }
 		}
 	};
 
 	std::vector<specialSkin> specialSkins {
-		{ FNV("Katarina"), 29, 36, { "Dagger 1", "Dagger 2", "Dagger 3", "Dagger 4", "Dagger 5", "Dagger 6" }},
-		{ FNV("Renekton"), 26, 32, { "Head off", "Head on", "Fins", "Ultimate" } },
-		{ FNV("MissFortune"), 16, 16, { "Scarlet fair", "Zero hour", "Royal arms", "Starswarm" } },
-		{ FNV("Ezreal"), 5, 5, { "Level 1", "Level 2", "Level 3" } }
+		{ FNV("Katarina"), 29, 36, { "Dagger 1"_o, "Dagger 2"_o, "Dagger 3"_o, "Dagger 4"_o, "Dagger 5"_o, "Dagger 6"_o }},
+		{ FNV("Renekton"), 26, 32, { "Head off"_o, "Head on"_o, "Fins"_o, "Ultimate"_o } },
+		{ FNV("MissFortune"), 16, 16, { "Scarlet fair"_o, "Zero hour"_o, "Royal arms"_o, "Starswarm"_o } },
+		{ FNV("Ezreal"), 5, 5, { "Level 1"_o, "Level 2"_o, "Level 3"_o } }
 	};
 };

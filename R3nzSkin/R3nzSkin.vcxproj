@@ -295,30 +295,6 @@
     <ClInclude Include="Memory.hpp" />
     <ClInclude Include="Hooks.hpp" />
     <ClInclude Include="GUI.hpp" />
-    <ClInclude Include="mem\aligned_alloc.h" />
-    <ClInclude Include="mem\arch.h" />
-    <ClInclude Include="mem\bitwise_enum.h" />
-    <ClInclude Include="mem\boyer_moore_scanner.h" />
-    <ClInclude Include="mem\char_queue.h" />
-    <ClInclude Include="mem\cmd_param-inl.h" />
-    <ClInclude Include="mem\cmd_param.h" />
-    <ClInclude Include="mem\data_buffer.h" />
-    <ClInclude Include="mem\defines.h" />
-    <ClInclude Include="mem\execution_handler.h" />
-    <ClInclude Include="mem\hasher.h" />
-    <ClInclude Include="mem\init_function.h" />
-    <ClInclude Include="mem\macros.h" />
-    <ClInclude Include="mem\mem.h" />
-    <ClInclude Include="mem\module.h" />
-    <ClInclude Include="mem\pattern.h" />
-    <ClInclude Include="mem\pattern_cache.h" />
-    <ClInclude Include="mem\protect.h" />
-    <ClInclude Include="mem\prot_flags.h" />
-    <ClInclude Include="mem\rtti.h" />
-    <ClInclude Include="mem\simd_scanner.h" />
-    <ClInclude Include="mem\slice.h" />
-    <ClInclude Include="mem\stub.h" />
-    <ClInclude Include="mem\utils.h" />
     <ClInclude Include="Offsets.hpp" />
     <ClInclude Include="pcg\pcg_extras.hpp" />
     <ClInclude Include="pcg\pcg_random.hpp" />
@@ -345,15 +321,12 @@
     <ClInclude Include="Utils\fnv_hash.hpp" />
     <ClInclude Include="Utils\lazy_importer.hpp" />
     <ClInclude Include="Utils\Logger.hpp" />
+    <ClInclude Include="Utils\obfuscate.h" />
     <ClInclude Include="Utils\Utils.hpp" />
     <ClInclude Include="Utils\vmt_smart_hook.hpp" />
-    <ClInclude Include="Utils\xorstr.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="R3nzSkin.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mem\cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,7 +15,7 @@
 #include "SDK/GameClient.hpp"
 #include "SDK/ManagerTemplate.hpp"
 
-#include "Utils/xorstr.hpp"
+#include "Utils/obfuscate.h"
 
 class offset_signature {
 public:
@@ -55,7 +55,7 @@ private:
 	{
 		{
 			{
-				xorstr_std("48 8B 05 ? ? ? ? 8B 58 0C")
+				"48 8B 05 ? ? ? ? 8B 58 0C"_o
 			}, true, false, true, 0, &offsets::global::GameClient
 		}
 	};
@@ -64,77 +64,77 @@ private:
 	{
 		{
 			{
-				xorstr_std("48 8B 3D ? ? ? ? 48 3B CF")
+				"48 8B 3D ? ? ? ? 48 3B CF"_o
 			}, true, false, true, 0, &offsets::global::Player
 		},
 		{
 			{
-				xorstr_std("48 8B 05 ? ? ? ? 48 8B 78 08 8B 40 10 4C 8D 3C C7 49 3B FF")
+				"48 8B 05 ? ? ? ? 48 8B 78 08 8B 40 10 4C 8D 3C C7 49 3B FF"_o
 			}, true, false, true, 0, &offsets::global::ManagerTemplate_AIHero_
 		},
 		{
 			{
-				xorstr_std("48 8B 0D ? ? ? ? 48 69 D0 ? ? 00 00 48 8B 05")
+				"48 8B 0D ? ? ? ? 48 69 D0 ? ? 00 00 48 8B 05"_o
 			}, true, false, true, 0, &offsets::global::ChampionManager
 		},
 		{
 			{
-				xorstr_std("48 89 0D ? ? ? ? 48 8D 05 ? ? ? ? 33 D2")
+				"48 89 0D ? ? ? ? 48 8D 05 ? ? ? ? 33 D2"_o
 			}, true, false, true, 0, &offsets::global::ManagerTemplate_AIMinionClient_
 		},
 		{
 			{
-				xorstr_std("48 89 0D ? ? ? ? 33 C9 48 8D 05 ? ? ? ? 4C 8D 05")
+				"48 89 0D ? ? ? ? 33 C9 48 8D 05 ? ? ? ? 4C 8D 05"_o
 			}, true, false, true, 0, &offsets::global::ManagerTemplate_AITurret_
 		},
 		{
 			{
-				xorstr_std("48 8B 0D ? ? ? ? FF 15 ? ? ? ? E8 ? ? ? ? 84 C0")
+				"48 8B 0D ? ? ? ? FF 15 ? ? ? ? E8 ? ? ? ? 84 C0"_o
 			}, true, false, true, 0, &offsets::global::Riot__g_window
 		},
 		{
 			{
-				xorstr_std("48 8D 8B ? ? ? ? 48 89 44 24 ? C7 44 24")
+				"48 8D 8B ? ? ? ? 48 89 44 24 ? C7 44 24"_o
 			}, false, true, false, 0, &offsets::AIBaseCommon::CharacterDataStack
 		},
 		{
 			{
-				xorstr_std("40 38 BB ? ? 00 00 0F 85 ? 00 00 00 66 C7 83 ? ? 00 00 00 04 0F 31 48 C1 E2 ? 4C 8D 83 ? ? 00 00 48 0B C2 44 8B CF 48 89 44 ? 38 8B D7 41 ? 01 00 00 00 66 0f 1F 84 00")
+				"40 38 BB ? ? 00 00 0F 85 ? 00 00 00 66 C7 83 ? ? 00 00 00 04 0F 31 48 C1 E2 ? 4C 8D 83 ? ? 00 00 48 0B C2 44 8B CF 48 89 44 ? 38 8B D7 41 ? 01 00 00 00 66 0f 1F 84 00"_o
 			}, false, true, false, 0, &offsets::AIBaseCommon::SkinId
 		},
 		{
 			{
-				xorstr_std("48 8B 8F ? ? 00 00 45 33 C0 8B D3 48 8B 01 FF 90 ? ? 00 00")
+				"48 8B 8F ? ? 00 00 45 33 C0 8B D3 48 8B 01 FF 90 ? ? 00 00"_o
 			}, false, true, false, 0, &offsets::MaterialRegistry::D3DDevice
 		},
 		{
 			{
-				xorstr_std("48 8D BB ? ? ? ? C6 83 ? ? ? ? ? 0F 84")
+				"48 8D BB ? ? ? ? C6 83 ? ? ? ? ? 0F 84"_o
 			}, false, true, false, 0, &offsets::MaterialRegistry::SwapChain
 		},
 		{
 			{
-				xorstr_std("E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0")
+				"E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0"_o
 			}, true, false, false, 0, &offsets::functions::CharacterDataStack__Push
 		},
 		{
 			{
-				xorstr_std("88 54 24 10 53 55 56 57 41 54 41 55 41 56 41")
+				"88 54 24 10 53 55 56 57 41 54 41 55 41 56 41"_o
 			}, true, false, false, 0, &offsets::functions::CharacterDataStack__Update
 		},
 		{
 			{
-				xorstr_std("E8 ? ? ? ? 8B 57 54")
+				"E8 ? ? ? ? 8B 57 54"_o
 			}, true, false, false, 0, &offsets::functions::Riot__Renderer__MaterialRegistry__GetSingletonPtr
 		},
 		{
 			{
-				xorstr_std("E8 ? ? ? ? 0F 57 DB 4C 8B C0 F3 0F 5A DE")
+				"E8 ? ? ? ? 0F 57 DB 4C 8B C0 F3 0F 5A DE"_o
 			}, true, false, false, 0, &offsets::functions::translateString_UNSAFE_DONOTUSE
 		},
 		{
 			{
-				xorstr_std("E8 ? ? ? ? 4C 3B F8 0F 94 C0")
+				"E8 ? ? ? ? 4C 3B F8 0F 94 C0"_o
 			}, true, false, false, 0, &offsets::functions::GetGoldRedirectTarget
 		}
 	};

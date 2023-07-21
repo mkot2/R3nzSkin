@@ -38,9 +38,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{6e1c3fe0-7b4e-4ddc-b0af-ef2565509bab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mem">
-      <UniqueIdentifier>{2c3b9e1b-3d9f-41d3-9a81-e0446f9340bc}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="R3nzSkin.cpp" />
@@ -216,9 +213,6 @@
     <ClInclude Include="Utils\encryption.hpp">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\xorstr.hpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\stb_sprintf.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -234,85 +228,11 @@
     <ClInclude Include="pcg\pcg_uint128.hpp">
       <Filter>PCG</Filter>
     </ClInclude>
-    <ClInclude Include="mem\pattern_cache.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\prot_flags.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\protect.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\rtti.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\simd_scanner.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\slice.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\stub.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\utils.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\aligned_alloc.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\arch.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\bitwise_enum.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\boyer_moore_scanner.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\cmd_param.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\cmd_param-inl.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\data_buffer.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\defines.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\execution_handler.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\hasher.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\char_queue.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\init_function.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\macros.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\mem.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\module.h">
-      <Filter>mem</Filter>
-    </ClInclude>
-    <ClInclude Include="mem\pattern.h">
-      <Filter>mem</Filter>
+    <ClInclude Include="Utils\obfuscate.h">
+      <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="R3nzSkin.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mem\cpp.hint">
-      <Filter>mem</Filter>
-    </None>
   </ItemGroup>
 </Project>

@@ -17,13 +17,13 @@
 #include "SDK/GameState.hpp"
 
 #include "Utils/lazy_importer.hpp"
-#include "Utils/xorstr.hpp"
+#include "Utils/obfuscate.h"
 
 bool WINAPI HideThread(const HANDLE hThread) noexcept
 {
 	__try {
 		using FnSetInformationThread = NTSTATUS(NTAPI*)(HANDLE ThreadHandle, UINT ThreadInformationClass, PVOID ThreadInformation, ULONG ThreadInformationLength);
-		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(LI_FN(GetProcAddress)(LI_FN(GetModuleHandle)(xorstr_("ntdll.dll")), xorstr_("NtSetInformationThread"))) };
+		const auto NtSetInformationThread{ reinterpret_cast<FnSetInformationThread>(LI_FN(GetProcAddress)(LI_FN(GetModuleHandle)("ntdll.dll"_o), "NtSetInformationThread"_o)) };
 
 		if (!NtSetInformationThread)
 			return false;
@@ -41,7 +41,7 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 
 	cheatManager.start();
 	if (HideThread(LI_FN(GetCurrentThread)()))
-		cheatManager.logger->addLog(xorstr_("Thread Hided!\n"));
+		cheatManager.logger->addLog("Thread Hided!\n"_o);
 
 	cheatManager.memory->Search(true);
 	while (true) {
@@ -52,16 +52,16 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 		else if (cheatManager.memory->client->game_state == GGameState_s::Running)
 			break;
 	}
-	cheatManager.logger->addLog(xorstr_("GameClient found!\n"));
+	cheatManager.logger->addLog("GameClient found!\n"_o);
 	
 	std::this_thread::sleep_for(500ms);
 	cheatManager.memory->Search(false);
-	cheatManager.logger->addLog(xorstr_("All offsets found!\n"));
+	cheatManager.logger->addLog("All offsets found!\n"_o);
 	std::this_thread::sleep_for(500ms);
 	
 	cheatManager.config->init();
 	cheatManager.config->load();
-	cheatManager.logger->addLog(xorstr_("CFG loaded!\n"));
+	cheatManager.logger->addLog("CFG loaded!\n"_o);
 	
 	cheatManager.hooks->install();
 		
@@ -79,7 +79,7 @@ __declspec(safebuffers) BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD
 		return FALSE;
 
 	HideThread(hModule);
-	std::setlocale(LC_ALL, xorstr_(".utf8"));
+	std::setlocale(LC_ALL, ".utf8"_o);
 
 	LI_FN(_beginthreadex)(nullptr, 0u, reinterpret_cast<_beginthreadex_proc_type>(DllAttach), nullptr, 0u, nullptr);
 	LI_FN(CloseHandle)(hModule);
