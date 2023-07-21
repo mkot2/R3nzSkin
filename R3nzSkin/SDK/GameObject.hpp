@@ -23,6 +23,6 @@ public:
 	// Returns true for minion.
 	[[nodiscard]] bool isMinion() const noexcept { return CallVirtual<offsets::GameObject::VTable::IsMinion, bool>(std::uintptr_t(this)); }
 
-	// Returns true for objects that both teams can damage, such as jungle objects, gangplain barrels, etc.
+	// Returns true for objects that both teams can damage, such as jungle objects, gangplank barrels, etc.
 	[[nodiscard]] bool isJungle() const noexcept { return CallVirtual<offsets::GameObject::VTable::IsJungle, bool>(std::uintptr_t(this)); }
 };

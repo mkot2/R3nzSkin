@@ -39,12 +39,12 @@ void Config::save() noexcept
 	config_json[xorstr_("menuKey")] = this->menuKey.toString();
 	config_json[xorstr_("nextSkinKey")] = this->nextSkinKey.toString();
 	config_json[xorstr_("previousSkinKey")] = this->previousSkinKey.toString();
-	config_json[xorstr_("heroName")] = this->heroName;
-	config_json[xorstr_("raibowText")] = this->rainbowText;
+	config_json[xorstr_("rainbowText")] = this->rainbowText;
 	config_json[xorstr_("quickSkinChange")] = this->quickSkinChange;
 	config_json[xorstr_("fontScale")] = this->fontScale;
 	config_json[xorstr_("current_combo_ward_index")] = this->current_combo_ward_index;
 	config_json[xorstr_("current_ward_skin_index")] = this->current_ward_skin_index;
+	config_json[xorstr_("current_combo_minion_index")] = this->current_combo_minion_index;
 	config_json[xorstr_("current_minion_skin_index")] = this->current_minion_skin_index;
 
 	for (const auto& it : this->current_combo_ally_skin_index)
@@ -79,12 +79,12 @@ void Config::load() noexcept
 	this->menuKey = KeyBind(config_json.value(xorstr_("menuKey"), xorstr_("INSERT")).c_str());
 	this->nextSkinKey = KeyBind(config_json.value(xorstr_("nextSkinKey"), xorstr_("PAGE_UP")).c_str());
 	this->previousSkinKey = KeyBind(config_json.value(xorstr_("previousSkinKey"), xorstr_("PAGE_DOWN")).c_str());
-	this->heroName = config_json.value(xorstr_("heroName"), true);
-	this->rainbowText = config_json.value(xorstr_("raibowText"), false);
+	this->rainbowText = config_json.value(xorstr_("rainbowText"), false);
 	this->quickSkinChange = config_json.value(xorstr_("quickSkinChange"), false);
 	this->fontScale = config_json.value(xorstr_("fontScale"), 1.0f);
 	this->current_combo_ward_index = config_json.value(xorstr_("current_combo_ward_index"), 0);
 	this->current_ward_skin_index = config_json.value(xorstr_("current_ward_skin_index"), -1);
+	this->current_combo_minion_index = config_json.value(xorstr_("current_combo_minion_index"), 0);	// we probably dont need 2 vars for the almost same thing
 	this->current_minion_skin_index = config_json.value(xorstr_("current_minion_skin_index"), -1);
 
 	const auto ally_skins{ config_json.find(xorstr_("current_combo_ally_skin_index")) };
@@ -110,15 +110,14 @@ void Config::reset() noexcept
 	this->menuKey = KeyBind(KeyBind::INSERT);
 	this->nextSkinKey = KeyBind(KeyBind::PAGE_UP);
 	this->previousSkinKey = KeyBind(KeyBind::PAGE_DOWN);
-	this->heroName = true;
-	this->rainbowText = true;
+	this->rainbowText = false;
 	this->quickSkinChange = false;
 	this->fontScale = 1.0f;
 	this->current_combo_skin_index = 0;
 	this->current_combo_ward_index = 0;
-	this->current_combo_minion_index = 0;
-	this->current_minion_skin_index = -1;
 	this->current_ward_skin_index = -1;
+	this->current_combo_minion_index = 0;
+	this->current_minion_skin_index = -1;	
 	this->current_combo_order_turret_index = 0;
 	this->current_combo_chaos_turret_index = 0;
 	this->current_combo_ally_skin_index.clear();

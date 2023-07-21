@@ -22,7 +22,6 @@ public:
 	KeyBind previousSkinKey{ KeyBind(KeyBind::PAGE_DOWN) };
 	bool rainbowText{ false };
 	float fontScale{ 1.0f };
-	bool heroName{ true };
 	bool quickSkinChange{ false };
 	// player
 	std::int32_t current_combo_skin_index{ 0 };
@@ -35,7 +34,7 @@ public:
 	std::int32_t current_combo_ward_index{ 0 };
 	std::int32_t current_ward_skin_index{ -1 };
 
-	// turrets, don't save them in config
+	// turrets, don't save them in config (why not???)
 	std::int32_t current_combo_order_turret_index{ 0 };
 	std::int32_t current_combo_chaos_turret_index{ 0 };
 
