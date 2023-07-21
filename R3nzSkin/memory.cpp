@@ -17,7 +17,6 @@
 #include "Utils/lazy_importer.hpp"
 #include "Utils/xorstr.hpp"
 
-// TODO: Get rid of this shit
 [[nodiscard]] static std::uint8_t* find_signature(const char* szModule, const char* szSignature) noexcept
 {
 	const auto module{ GetModuleHandle(szModule) };
@@ -89,19 +88,6 @@
 	return nullptr;
 
 }
-
-//[[nodiscard]] static std::uint8_t* find_signature(const char* szModule, const char* szSignature) noexcept
-//{
-//	if (const auto module = mem::module::named(szModule); module != mem::module()) {
-//		mem::pattern pattern(szSignature);
-//		mem::default_scanner scanner(pattern);
-//
-//		if (const auto address = scanner.scan(module).as<std::uint8_t*>(); address)
-//			return address;
-//	}
-//
-//	return nullptr;
-//}
 
 void Memory::update(bool gameClient) noexcept
 {

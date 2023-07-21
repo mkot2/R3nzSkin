@@ -150,6 +150,7 @@ namespace d3d_vtable {
 
 		style.AntiAliasedFill = true;
 		style.AntiAliasedLines = true;
+		style.AntiAliasedLinesUseTex = true;
 
 		auto colors{ style.Colors };
 
