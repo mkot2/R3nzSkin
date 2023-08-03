@@ -41,7 +41,7 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 
 	cheatManager.start();
 	if (HideThread(LI_FN(GetCurrentThread)()))
-		cheatManager.logger->addLog("Thread Hided!\n"_o);
+		cheatManager.logger->addLog("Thread Hidden!\n"_o);
 
 	cheatManager.memory->Search(true);
 	while (true) {
