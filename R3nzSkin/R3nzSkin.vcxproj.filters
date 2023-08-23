@@ -95,6 +95,9 @@
     <ClCompile Include="imgui\imgui_user.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\imgui-combo-filter.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SkinDatabase.hpp">
@@ -230,6 +233,9 @@
     </ClInclude>
     <ClInclude Include="Utils\obfuscate.h">
       <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui-combo-filter.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

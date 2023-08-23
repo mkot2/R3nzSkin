@@ -389,12 +389,6 @@ void Hooks::init() noexcept
 				stack.skin = hero->get_character_data_stack()->base_skin.skin;
 				hero->get_character_data_stack()->update(true);
 			}
-		} else if (hero == player) {
-			if (const auto championName{ fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str) }; championName == FNV("Kaisa"))
-				continue;
-
-			const auto& values{ cheatManager.database->champions_skins[fnv::hash_runtime(hero->get_character_data_stack()->base_skin.model.str)] };
-			player->change_skin(values[cheatManager.config->current_combo_skin_index - 1].model_name, values[cheatManager.config->current_combo_skin_index - 1].skin_id);
 		}
 	}
 
