@@ -59,7 +59,7 @@
 		for (auto j{ 0ul }; j < s; ++j) {
 			const auto current_address{ scanBytes + i + j };
 			if (current_address >= next_check_address) {
-				if (!::VirtualQuery(current_address, &mbi, sizeof(mbi)))
+				if (!LI_FN(VirtualQuery)(current_address, &mbi, sizeof(mbi)))
 					break;
 
 				if (mbi.Protect == PAGE_NOACCESS) {
@@ -109,7 +109,7 @@ void Memory::Search(bool gameClient)
 	using namespace std::chrono_literals;
 
 	try {
-		this->base = reinterpret_cast<std::uintptr_t>(::GetModuleHandle(nullptr));
+		this->base = reinterpret_cast<std::uintptr_t>(GetModuleHandle(nullptr));
 		const auto& signatureToSearch{ (gameClient ? this->gameClientSig : this->sigs) };
 
 		for (const auto& sig : signatureToSearch)
@@ -126,7 +126,7 @@ void Memory::Search(bool gameClient)
 					auto address{ find_signature(nullptr, pattern.c_str()) };
 
 					if (!address) {
-						::MessageBoxA(nullptr, ("Failed to find pattern: "_o + pattern).c_str(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
+						LI_FN(MessageBoxA)(nullptr, ("Failed to find pattern: "_o + pattern).c_str(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
 						// cheatManager.logger->addLog("Not found: %s\n"_o, pattern.c_str());
 						continue;
 					}
@@ -161,6 +161,6 @@ void Memory::Search(bool gameClient)
 		}
 		this->update(gameClient);
 	} catch (const std::exception& e) {
-		::MessageBoxA(nullptr, e.what(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
+		LI_FN(MessageBoxA)(nullptr, e.what(), "R3nzSkin"_o, MB_OK | MB_ICONWARNING);
 	}
 }

@@ -11,11 +11,12 @@
 #include "Memory.hpp"
 #include "utils/Utils.hpp"
 
+#include "utils/lazy_importer.hpp"
 #include "utils/obfuscate.h"
 
 void Config::init() noexcept
 {
-	if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
+	if (PWSTR pathToDocuments; SUCCEEDED(LI_FN(SHGetKnownFolderPath)(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
 		this->path = pathToDocuments;
 		CoTaskMemFree(pathToDocuments);
 	}

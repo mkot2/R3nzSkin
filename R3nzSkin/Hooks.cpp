@@ -79,8 +79,10 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
 		isInactive = false;
 	}
 
-	if (cheatManager.gui->is_open && ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+	if (cheatManager.gui->is_open) {
+		ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 		return true;
+	}
 	else
 		return ::CallWindowProc(originalWndProc, window, msg, wParam, lParam);
 }

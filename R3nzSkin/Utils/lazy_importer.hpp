@@ -1,18 +1,18 @@
 /*
- * Copyright 2018-2022 Justas Masiulis
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2018-2022 Justas Masiulis
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 // === FAQ === documentation is available at https://github.com/JustasMasiulis/lazy_importer
 // * Code doesn't compile with errors about pointer conversion:
@@ -23,6 +23,10 @@
 //     This will start using case insensitive comparison globally
 //   - Try #define LAZY_IMPORTER_RESOLVE_FORWARDED_EXPORTS
 //     This will enable forwarded export resolution globally instead of needing explicit `forwarded()` calls
+
+#define LAZY_IMPORTER_CASE_INSENSITIVE
+#define LAZY_IMPORTER_HARDENED_MODULE_CHECKS
+#define LAZY_IMPORTER_RESOLVE_FORWARDED_EXPORTS
 
 #ifndef LAZY_IMPORTER_HPP
 #define LAZY_IMPORTER_HPP
@@ -68,60 +72,71 @@
 #define LAZY_IMPORTER_STRINGIZE_EXPAND(x) LAZY_IMPORTER_STRINGIZE(x)
 
 #define LAZY_IMPORTER_KHASH(str) ::li::detail::khash(str, \
-    ::li::detail::khash_impl( __TIME__ __DATE__ LAZY_IMPORTER_STRINGIZE_EXPAND(__LINE__) LAZY_IMPORTER_STRINGIZE_EXPAND(__COUNTER__), 2166136261 ))
+::li::detail::khash_impl( __TIME__ __DATE__ LAZY_IMPORTER_STRINGIZE_EXPAND(__LINE__) LAZY_IMPORTER_STRINGIZE_EXPAND(__COUNTER__), 2166136261 ))
 
-namespace li { namespace detail {
+namespace li
+{
+namespace detail
+{
 
-    namespace win {
+    namespace win
+    {
 
-        struct LIST_ENTRY_T {
+        struct LIST_ENTRY_T
+        {
             const char* Flink;
             const char* Blink;
         };
 
-        struct UNICODE_STRING_T {
+        struct UNICODE_STRING_T
+        {
             unsigned short Length;
             unsigned short MaximumLength;
-            wchar_t*       Buffer;
+            wchar_t* Buffer;
         };
 
-        struct PEB_LDR_DATA_T {
+        struct PEB_LDR_DATA_T
+        {
             unsigned long Length;
             unsigned long Initialized;
-            const char*   SsHandle;
+            const char* SsHandle;
             LIST_ENTRY_T  InLoadOrderModuleList;
         };
 
-        struct PEB_T {
+        struct PEB_T
+        {
             unsigned char   Reserved1[2];
             unsigned char   BeingDebugged;
             unsigned char   Reserved2[1];
-            const char*     Reserved3[2];
+            const char* Reserved3[2];
             PEB_LDR_DATA_T* Ldr;
         };
 
-        struct LDR_DATA_TABLE_ENTRY_T {
+        struct LDR_DATA_TABLE_ENTRY_T
+        {
             LIST_ENTRY_T InLoadOrderLinks;
             LIST_ENTRY_T InMemoryOrderLinks;
             LIST_ENTRY_T InInitializationOrderLinks;
-            const char*  DllBase;
-            const char*  EntryPoint;
-            union {
+            const char* DllBase;
+            const char* EntryPoint;
+            union
+            {
                 unsigned long SizeOfImage;
-                const char*   _dummy;
+                const char* _dummy;
             };
             UNICODE_STRING_T FullDllName;
             UNICODE_STRING_T BaseDllName;
 
             LAZY_IMPORTER_FORCEINLINE const LDR_DATA_TABLE_ENTRY_T*
-                                            load_order_next() const noexcept
+                load_order_next() const noexcept
             {
                 return reinterpret_cast<const LDR_DATA_TABLE_ENTRY_T*>(
                     InLoadOrderLinks.Flink);
             }
         };
 
-        struct IMAGE_DOS_HEADER { // DOS .EXE header
+        struct IMAGE_DOS_HEADER
+        { // DOS .EXE header
             unsigned short e_magic; // Magic number
             unsigned short e_cblp; // Bytes on last page of file
             unsigned short e_cp; // Pages in file
@@ -143,7 +158,8 @@ namespace li { namespace detail {
             long           e_lfanew; // File address of new exe header
         };
 
-        struct IMAGE_FILE_HEADER {
+        struct IMAGE_FILE_HEADER
+        {
             unsigned short Machine;
             unsigned short NumberOfSections;
             unsigned long  TimeDateStamp;
@@ -153,7 +169,8 @@ namespace li { namespace detail {
             unsigned short Characteristics;
         };
 
-        struct IMAGE_EXPORT_DIRECTORY {
+        struct IMAGE_EXPORT_DIRECTORY
+        {
             unsigned long  Characteristics;
             unsigned long  TimeDateStamp;
             unsigned short MajorVersion;
@@ -167,12 +184,14 @@ namespace li { namespace detail {
             unsigned long  AddressOfNameOrdinals; // RVA from base of image
         };
 
-        struct IMAGE_DATA_DIRECTORY {
+        struct IMAGE_DATA_DIRECTORY
+        {
             unsigned long VirtualAddress;
             unsigned long Size;
         };
 
-        struct IMAGE_OPTIONAL_HEADER64 {
+        struct IMAGE_OPTIONAL_HEADER64
+        {
             unsigned short       Magic;
             unsigned char        MajorLinkerVersion;
             unsigned char        MinorLinkerVersion;
@@ -205,7 +224,8 @@ namespace li { namespace detail {
             IMAGE_DATA_DIRECTORY DataDirectory[16];
         };
 
-        struct IMAGE_OPTIONAL_HEADER32 {
+        struct IMAGE_OPTIONAL_HEADER32
+        {
             unsigned short       Magic;
             unsigned char        MajorLinkerVersion;
             unsigned char        MinorLinkerVersion;
@@ -239,7 +259,8 @@ namespace li { namespace detail {
             IMAGE_DATA_DIRECTORY DataDirectory[16];
         };
 
-        struct IMAGE_NT_HEADERS {
+        struct IMAGE_NT_HEADERS
+        {
             unsigned long     Signature;
             IMAGE_FILE_HEADER FileHeader;
 #ifdef _WIN64
@@ -251,25 +272,24 @@ namespace li { namespace detail {
 
     } // namespace win
 
-    struct forwarded_hashes {
-       unsigned module_hash;
-       unsigned function_hash;
+    struct forwarded_hashes
+    {
+        unsigned module_hash;
+        unsigned function_hash;
     };
 
     // 64 bit integer where 32 bits are used for the hash offset
     // and remaining 32 bits are used for the hash computed using it
     using offset_hash_pair = unsigned long long;
 
-    LAZY_IMPORTER_FORCEINLINE constexpr unsigned get_hash(offset_hash_pair pair) noexcept { return ( pair & 0xFFFFFFFF ); }
+    LAZY_IMPORTER_FORCEINLINE constexpr unsigned get_hash(offset_hash_pair pair) noexcept { return (pair & 0xFFFFFFFF); }
 
-    LAZY_IMPORTER_FORCEINLINE constexpr unsigned get_offset(offset_hash_pair pair) noexcept { return ( pair >> 32 ); }
+    LAZY_IMPORTER_FORCEINLINE constexpr unsigned get_offset(offset_hash_pair pair) noexcept { return static_cast<unsigned>(pair >> 32); }
 
     template<bool CaseSensitive = LAZY_IMPORTER_CASE_SENSITIVITY>
     LAZY_IMPORTER_FORCEINLINE constexpr unsigned hash_single(unsigned value, char c) noexcept
     {
-        return static_cast<unsigned int>(
-            (value ^ ((!CaseSensitive && c >= 'A' && c <= 'Z') ? (c | (1 << 5)) : c)) *
-            static_cast<unsigned long long>(16777619));
+        return (value ^ static_cast<unsigned>((!CaseSensitive && c >= 'A' && c <= 'Z') ? (c | (1 << 5)) : c)) * 16777619;
     }
 
     LAZY_IMPORTER_FORCEINLINE constexpr unsigned
@@ -289,21 +309,21 @@ namespace li { namespace detail {
     {
         unsigned value = offset;
 
-        for(;;) {
+        for (;;) {
             char c = *str++;
-            if(!c)
+            if (!c)
                 return value;
             value = hash_single(value, c);
         }
     }
 
     LAZY_IMPORTER_FORCEINLINE unsigned hash(
-       const win::UNICODE_STRING_T& str, unsigned offset) noexcept
+        const win::UNICODE_STRING_T& str, unsigned offset) noexcept
     {
         auto       first = str.Buffer;
-        const auto last  = first + (str.Length / sizeof(wchar_t));
+        const auto last = first + (str.Length / sizeof(wchar_t));
         auto       value = offset;
-        for(; first != last; ++first)
+        for (; first != last; ++first)
             value = hash_single(value, static_cast<char>(*first));
 
         return value;
@@ -314,12 +334,12 @@ namespace li { namespace detail {
     {
         forwarded_hashes res{ offset, offset };
 
-        for(; *str != '.'; ++str)
+        for (; *str != '.'; ++str)
             res.module_hash = hash_single<true>(res.module_hash, *str);
 
         ++str;
 
-        for(; *str; ++str)
+        for (; *str; ++str)
             res.function_hash = hash_single(res.function_hash, *str);
 
         return res;
@@ -329,9 +349,21 @@ namespace li { namespace detail {
     LAZY_IMPORTER_FORCEINLINE const win::PEB_T* peb() noexcept
     {
 #if defined(_M_X64) || defined(__amd64__)
+#if defined(_MSC_VER)
         return reinterpret_cast<const win::PEB_T*>(__readgsqword(0x60));
+#else
+        const win::PEB_T* ptr;
+        __asm__ __volatile__("mov %%gs:0x60, %0" : "=r"(ptr));
+        return ptr;
+#endif
 #elif defined(_M_IX86) || defined(__i386__)
+#if defined(_MSC_VER)
         return reinterpret_cast<const win::PEB_T*>(__readfsdword(0x30));
+#else
+        const win::PEB_T* ptr;
+        __asm__ __volatile__("mov %%fs:0x30, %0" : "=r"(ptr));
+        return ptr;
+#endif
 #elif defined(_M_ARM) || defined(__arm__)
         return *reinterpret_cast<const win::PEB_T**>(_MoveFromCoprocessor(15, 0, 13, 0, 2) + 0x30);
 #elif defined(_M_ARM64) || defined(__aarch64__)
@@ -339,7 +371,7 @@ namespace li { namespace detail {
 #elif defined(_M_IA64) || defined(__ia64__)
         return *reinterpret_cast<const win::PEB_T**>(static_cast<char*>(_rdteb()) + 0x60);
 #else
-#error Unsupported platform. Open an issue and I'll probably add support.
+#error Unsupported platform. Open an issue and Ill probably add support.
 #endif
     }
 
@@ -368,16 +400,17 @@ namespace li { namespace detail {
             ldr()->InLoadOrderModuleList.Flink);
     }
 
-    struct exports_directory {
-        const char*                        _base;
-        const win::IMAGE_EXPORT_DIRECTORY* _ied;
+    struct exports_directory
+    {
         unsigned long                      _ied_size;
+        const char* _base;
+        const win::IMAGE_EXPORT_DIRECTORY* _ied;
 
     public:
         using size_type = unsigned long;
 
         LAZY_IMPORTER_FORCEINLINE
-        exports_directory(const char* base) noexcept : _base(base)
+            exports_directory(const char* base) noexcept : _base(base)
         {
             const auto ied_data_dir = nt_headers(base)->OptionalHeader.DataDirectory[0];
             _ied = reinterpret_cast<const win::IMAGE_EXPORT_DIRECTORY*>(
@@ -403,9 +436,7 @@ namespace li { namespace detail {
 
         LAZY_IMPORTER_FORCEINLINE const char* name(size_type index) const noexcept
         {
-            return reinterpret_cast<const char*>(
-                _base + reinterpret_cast<const unsigned long*>(
-                            _base + _ied->AddressOfNames)[index]);
+            return _base + reinterpret_cast<const unsigned long*>(_base + _ied->AddressOfNames)[index];
         }
 
         LAZY_IMPORTER_FORCEINLINE const char* address(size_type index) const noexcept
@@ -427,19 +458,22 @@ namespace li { namespace detail {
         }
     };
 
-    struct safe_module_enumerator {
+    struct safe_module_enumerator
+    {
         using value_type = const detail::win::LDR_DATA_TABLE_ENTRY_T;
         value_type* value;
         value_type* head;
 
         LAZY_IMPORTER_FORCEINLINE safe_module_enumerator() noexcept
             : safe_module_enumerator(ldr_data_entry())
-        {}
+        {
+        }
 
         LAZY_IMPORTER_FORCEINLINE
-        safe_module_enumerator(const detail::win::LDR_DATA_TABLE_ENTRY_T* ldr) noexcept
+            safe_module_enumerator(const detail::win::LDR_DATA_TABLE_ENTRY_T* ldr) noexcept
             : value(ldr->load_order_next()), head(value)
-        {}
+        {
+        }
 
         LAZY_IMPORTER_FORCEINLINE void reset() noexcept
         {
@@ -454,13 +488,15 @@ namespace li { namespace detail {
         }
     };
 
-    struct unsafe_module_enumerator {
+    struct unsafe_module_enumerator
+    {
         using value_type = const detail::win::LDR_DATA_TABLE_ENTRY_T*;
         value_type value;
 
         LAZY_IMPORTER_FORCEINLINE unsafe_module_enumerator() noexcept
             : value(ldr_data_entry())
-        {}
+        {
+        }
 
         LAZY_IMPORTER_FORCEINLINE void reset() noexcept { value = ldr_data_entry(); }
 
@@ -473,7 +509,8 @@ namespace li { namespace detail {
 
     // provides the cached functions which use Derive classes methods
     template<class Derived, class DefaultType = void*>
-    class lazy_base {
+    class lazy_base
+    {
     protected:
         // This function is needed because every templated function
         // with different args has its own static buffer
@@ -494,7 +531,7 @@ namespace li { namespace detail {
         LAZY_IMPORTER_FORCEINLINE static T cached() noexcept
         {
             auto& cached = _cache();
-            if(!cached)
+            if (!cached)
                 cached = Derived::template get<void*, Enum>();
 
             return (T)(cached);
@@ -508,26 +545,27 @@ namespace li { namespace detail {
     };
 
     template<offset_hash_pair OHP>
-    struct lazy_module : lazy_base<lazy_module<OHP>> {
+    struct lazy_module : lazy_base<lazy_module<OHP>>
+    {
         template<class T = void*, class Enum = unsafe_module_enumerator>
         LAZY_IMPORTER_FORCEINLINE static T get() noexcept
         {
             Enum e;
             do {
-                if(hash(e.value->BaseDllName, get_offset(OHP)) == get_hash(OHP))
+                if (hash(e.value->BaseDllName, get_offset(OHP)) == get_hash(OHP))
                     return (T)(e.value->DllBase);
-            } while(e.next());
+            } while (e.next());
             return {};
         }
 
         template<class T = void*, class Ldr>
         LAZY_IMPORTER_FORCEINLINE static T in(Ldr ldr) noexcept
         {
-            safe_module_enumerator e((const detail::win::LDR_DATA_TABLE_ENTRY_T*)(ldr));
+            safe_module_enumerator e(reinterpret_cast<const detail::win::LDR_DATA_TABLE_ENTRY_T*>(ldr));
             do {
-                if(hash(e.value->BaseDllName, get_offset(OHP)) == get_hash(OHP))
+                if (hash(e.value->BaseDllName, get_offset(OHP)) == get_hash(OHP))
                     return (T)(e.value->DllBase);
-            } while(e.next());
+            } while (e.next());
             return {};
         }
 
@@ -535,7 +573,7 @@ namespace li { namespace detail {
         LAZY_IMPORTER_FORCEINLINE static T in_cached(Ldr ldr) noexcept
         {
             auto& cached = lazy_base<lazy_module<OHP>>::_cache();
-            if(!cached)
+            if (!cached)
                 cached = in(ldr);
 
             return (T)(cached);
@@ -543,7 +581,8 @@ namespace li { namespace detail {
     };
 
     template<offset_hash_pair OHP, class T>
-    struct lazy_function : lazy_base<lazy_function<OHP, T>, T> {
+    struct lazy_function : lazy_base<lazy_function<OHP, T>, T>
+    {
         using base_type = lazy_base<lazy_function<OHP, T>, T>;
 
         template<class... Args>
@@ -570,19 +609,19 @@ namespace li { namespace detail {
 
             do {
 #ifdef LAZY_IMPORTER_HARDENED_MODULE_CHECKS
-                if(!e.value->DllBase || !e.value->FullDllName.Length)
+                if (!e.value->DllBase || !e.value->FullDllName.Length)
                     continue;
 #endif
 
                 const exports_directory exports(e.value->DllBase);
 
-                if(exports) {
+                if (exports) {
                     auto export_index = exports.size();
-                    while(export_index--)
-                        if(hash(exports.name(export_index), get_offset(OHP)) == get_hash(OHP))
+                    while (export_index--)
+                        if (hash(exports.name(export_index), get_offset(OHP)) == get_hash(OHP))
                             return (F)(exports.address(export_index));
                 }
-            } while(e.next());
+            } while (e.next());
             return {};
 #endif
         }
@@ -598,16 +637,16 @@ namespace li { namespace detail {
                 name = e.value->BaseDllName;
                 name.Length -= 8; // get rid of .dll extension
 
-                if(!hashes.module_hash || hash(name, get_offset(OHP)) == hashes.module_hash) {
+                if (!hashes.module_hash || hash(name, get_offset(OHP)) == hashes.module_hash) {
                     const exports_directory exports(e.value->DllBase);
 
-                    if(exports) {
+                    if (exports) {
                         auto export_index = exports.size();
-                        while(export_index--)
-                            if(hash(exports.name(export_index), get_offset(OHP)) == hashes.function_hash) {
+                        while (export_index--)
+                            if (hash(exports.name(export_index), get_offset(OHP)) == hashes.function_hash) {
                                 const auto addr = exports.address(export_index);
 
-                                if(exports.is_forwarded(addr)) {
+                                if (exports.is_forwarded(addr)) {
                                     hashes = hash_forwarded(
                                         reinterpret_cast<const char*>(addr),
                                         get_offset(OHP));
@@ -619,7 +658,7 @@ namespace li { namespace detail {
                             }
                     }
                 }
-            } while(e.next());
+            } while (e.next());
             return {};
         }
 
@@ -633,7 +672,7 @@ namespace li { namespace detail {
         LAZY_IMPORTER_FORCEINLINE static F forwarded_cached() noexcept
         {
             auto& value = base_type::_cache();
-            if(!value)
+            if (!value)
                 value = forwarded<void*, Enum>();
             return (F)(value);
         }
@@ -647,18 +686,18 @@ namespace li { namespace detail {
         template<class F = T, bool IsSafe = false, class Module>
         LAZY_IMPORTER_FORCEINLINE static F in(Module m) noexcept
         {
-            if(IsSafe && !m)
+            if (IsSafe && !m)
                 return {};
 
             const exports_directory exports((const char*)(m));
-            if(IsSafe && !exports)
+            if (IsSafe && !exports)
                 return {};
 
-            for(unsigned long i{};; ++i) {
-                if(IsSafe && i == exports.size())
+            for (unsigned long i{};; ++i) {
+                if (IsSafe && i == exports.size())
                     break;
 
-                if(hash(exports.name(i), get_offset(OHP)) == get_hash(OHP))
+                if (hash(exports.name(i), get_offset(OHP)) == get_hash(OHP))
                     return (F)(exports.address(i));
             }
             return {};
@@ -674,7 +713,7 @@ namespace li { namespace detail {
         LAZY_IMPORTER_FORCEINLINE static F in_cached(Module m) noexcept
         {
             auto& value = base_type::_cache();
-            if(!value)
+            if (!value)
                 value = in<void*, IsSafe>(m);
             return (F)(value);
         }
@@ -710,6 +749,7 @@ namespace li { namespace detail {
         }
     };
 
-}} // namespace li::detail
+}
+} // namespace li::detail
 
 #endif // include guard

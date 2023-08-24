@@ -39,6 +39,9 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 {
 	using namespace std::chrono_literals;
 
+	LI_FN(LoadLibraryA)("User32.dll"_o); // MessageBoxA
+	LI_FN(LoadLibraryA)("Shell32.dll"_o); // SHGetKnownFolderPath
+
 	cheatManager.start();
 	if (HideThread(LI_FN(GetCurrentThread)()))
 		cheatManager.logger->addLog("Thread Hidden!\n"_o);
