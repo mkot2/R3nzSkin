@@ -81,6 +81,11 @@ static const char* vector_skin_getter(const std::vector<SkinDatabase::skin_info>
 
 void GUI::render() noexcept
 {
+	std::call_once(set_font_scale, [&]
+	{
+		ImGui::GetIO().FontGlobalScale = cheatManager.config->fontScale;
+	});
+
 	const auto player{ cheatManager.memory->localPlayer };
 	const auto heroes{ cheatManager.memory->heroList };
 	static const auto my_team{ player ? player->get_team() : 100 };
