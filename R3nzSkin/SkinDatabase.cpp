@@ -65,4 +65,9 @@ void SkinDatabase::load() noexcept
 
 		this->wards_skins.emplace_back(ward_skin_id, ward_display_name_translated);
 	}
+
+	/* sort wards */
+	std::ranges::sort(this->wards_skins, [](const auto& a, const auto& b) {
+		return std::strong_ordering::less == std::strcmp(a.second, b.second) <=> 0;
+	});
 }

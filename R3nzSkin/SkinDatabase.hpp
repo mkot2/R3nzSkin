@@ -4,6 +4,7 @@
 #include <map>
 #include <utility>
 #include <vector>
+#include <compare>
 
 #include "Utils/obfuscate.h"
 #include "utils/fnv_hash.hpp"
