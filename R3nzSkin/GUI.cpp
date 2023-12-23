@@ -167,10 +167,10 @@ void GUI::render() noexcept
 						auto& config_array{ is_enemy ? cheatManager.config->current_combo_enemy_skin_index : cheatManager.config->current_combo_ally_skin_index };
 						const auto [fst, snd] { config_array.insert({ champion_name_hash, 0 }) };
 
-						mFormatString(str_buffer, sizeof(str_buffer), "%s (%s)##%X"_o, hero->get_name()->c_str(), hero->get_character_data_stack()->base_skin.model.str, reinterpret_cast<std::uintptr_t>(hero));
+						ImFormatString(str_buffer, sizeof(str_buffer), "%s (%s)##%X"_o, hero->get_name()->c_str(), hero->get_character_data_stack()->base_skin.model.str, reinterpret_cast<std::uintptr_t>(hero));
 
 						auto& values{ cheatManager.database->champions_skins[champion_name_hash] };
-						if (ImGui::Combo(str_buffer, &fst->second, vector_getter_skin, static_cast<void*>(&values), values.size() + 1))
+						if (ImGui::ComboAutoSelect(str_buffer, reinterpret_cast<int&>(fst->second), values, vector_skin_getter))
 							if (fst->second > 0)
 								hero->change_skin(values[fst->second - 1].model_name, values[fst->second - 1].skin_id);
 					}
@@ -190,11 +190,11 @@ void GUI::render() noexcept
 				if (ImGui::ComboAutoSelect("Chaos Turret Skins"_o, cheatManager.config->current_combo_chaos_turret_index, cheatManager.database->turret_skins, vector_default_getter))
 					changeTurretSkin(cheatManager.config->current_combo_chaos_turret_index - 1, 200);
 				ImGui::Separator();
-				ImGui::Text("Jungle Mobs Skins Settings:");
+				ImGui::Text("Jungle Mobs Skins Settings:"_o);
 				for (auto& [name, name_hashes, skins] : cheatManager.database->jungle_mobs_skins) {
 					ImFormatString(str_buffer, sizeof(str_buffer), "Current %s skin"_o, name);
 					const auto [fst, snd]{ cheatManager.config->current_combo_jungle_mob_skin_index.insert({ name_hashes.front(), 0 }) };
-					if (ImGui::Combo(str_buffer, &fst->second, vector_getter_default, &skins, skins.size() + 1))
+					if (ImGui::ComboAutoSelect(str_buffer, reinterpret_cast<int&>(fst->second), skins, vector_default_getter))
 						for (const auto& hash : name_hashes)
 							cheatManager.config->current_combo_jungle_mob_skin_index[hash] = fst->second;
 				}
