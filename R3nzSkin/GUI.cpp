@@ -170,7 +170,7 @@ void GUI::render() noexcept
 						ImFormatString(str_buffer, sizeof(str_buffer), "%s (%s)##%X"_o, hero->get_name()->c_str(), hero->get_character_data_stack()->base_skin.model.str, reinterpret_cast<std::uintptr_t>(hero));
 
 						auto& values{ cheatManager.database->champions_skins[champion_name_hash] };
-						if (ImGui::ComboAutoSelect(str_buffer, reinterpret_cast<int&>(fst->second), values, vector_skin_getter))
+						if (ImGui::ComboAutoSelect(str_buffer, (int&)(fst->second), values, vector_skin_getter))
 							if (fst->second > 0)
 								hero->change_skin(values[fst->second - 1].model_name, values[fst->second - 1].skin_id);
 					}
@@ -194,7 +194,7 @@ void GUI::render() noexcept
 				for (auto& [name, name_hashes, skins] : cheatManager.database->jungle_mobs_skins) {
 					ImFormatString(str_buffer, sizeof(str_buffer), "Current %s skin"_o, name);
 					const auto [fst, snd]{ cheatManager.config->current_combo_jungle_mob_skin_index.insert({ name_hashes.front(), 0 }) };
-					if (ImGui::ComboAutoSelect(str_buffer, reinterpret_cast<int&>(fst->second), skins, vector_default_getter))
+					if (ImGui::ComboAutoSelect(str_buffer, (int&)(fst->second), skins, vector_default_getter))
 						for (const auto& hash : name_hashes)
 							cheatManager.config->current_combo_jungle_mob_skin_index[hash] = fst->second;
 				}
