@@ -23,7 +23,7 @@ inline static void footer() noexcept
 	static const auto buildText = std::vformat("Build time: {} - {}"_o, std::make_format_args(__DATE__, __TIME__));
 	ImGui::Separator();
 	ImGui::textUnformattedCentered(buildText.c_str());
-	ImGui::textUnformattedCentered("Copyright (C) 2021-2023 R3nzTheCodeGOD, MK"_o);
+	ImGui::textUnformattedCentered("Copyright (C) 2021-2024 R3nzTheCodeGOD, MK"_o);
 }
 
 static void changeTurretSkin(const std::int32_t skinId, const std::int32_t team) noexcept
